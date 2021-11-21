@@ -355,7 +355,7 @@ def main():
     f.write('<?xml version="1.0" encoding="utf-8" ?>\n')
     f.write("<Defs>\n\n")
     
-    for i in range(0,493):
+    for i in range(0,len(defNameList)):
         """Getting all data from csv file"""
         pokedexNumber = PokemonData.DexNumber[i]
         pokemonDefName = PokemonData.DefName[i]
