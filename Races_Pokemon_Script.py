@@ -1006,6 +1006,27 @@ def main():
                 f.write("        <eggCountRange>1</eggCountRange>\n")
                 f.write("      </li>\n") 
                 
+        if((type1 == "Fire" or type2 == "Fire") and not(type1 == "Ice" or type2 == "Ice")):
+            f.write('      <li Class="CompProperties_HeatPusher">\n') 
+            f.write("        <compClass>PokeWorld.CompPokemonHeatPusher</compClass>\n")
+            f.write("        <heatPerSecond>%.2f</heatPerSecond>\n"%(totalStat / 200))
+            f.write("        <heatPushMaxTemperature>32</heatPushMaxTemperature>\n")
+            f.write("      </li>\n") 
+            
+        if((type1 == "Ice" or type2 == "Ice") and not(type1 == "Fire" or type2 == "Fire")):
+            f.write('      <li Class="CompProperties_HeatPusher">\n') 
+            f.write("        <compClass>PokeWorld.CompPokemonHeatPusher</compClass>\n")
+            f.write("        <heatPerSecond>%.2f</heatPerSecond>\n"%(-totalStat / 200))
+            f.write("        <heatPushMinTemperature>-8</heatPushMinTemperature>\n")
+            f.write("      </li>\n")
+        
+        if(type1 == "Electric" or type2 == "Electric"):
+            f.write('      <li Class="CompProperties_Power">\n') 
+            f.write("        <compClass>PokeWorld.CompPokemonPower</compClass>\n")
+            f.write("        <basePowerConsumption>%.2f</basePowerConsumption>\n"%(-totalStat / 10))
+            f.write("        <transmitsPower>true</transmitsPower>\n")
+            f.write("      </li>\n")
+                
         f.write("    </comps>\n")
     
     
