@@ -3993,11 +3993,6 @@
         <eggProgressUnfertilizedMax>0</eggProgressUnfertilizedMax>
         <eggCountRange>1</eggCountRange>
       </li>
-      <li Class="CompProperties_Power">
-        <compClass>PokeWorld.CompPokemonPower</compClass>
-        <basePowerConsumption>-32.00</basePowerConsumption>
-        <transmitsPower>true</transmitsPower>
-      </li>
     </comps>
     <statBases>
       <MoveSpeed>4.9</MoveSpeed>
@@ -4152,11 +4147,6 @@
         <eggLayIntervalDays>3</eggLayIntervalDays>
         <eggProgressUnfertilizedMax>0</eggProgressUnfertilizedMax>
         <eggCountRange>1</eggCountRange>
-      </li>
-      <li Class="CompProperties_Power">
-        <compClass>PokeWorld.CompPokemonPower</compClass>
-        <basePowerConsumption>-48.50</basePowerConsumption>
-        <transmitsPower>true</transmitsPower>
       </li>
     </comps>
     <statBases>
@@ -13106,11 +13096,6 @@
         <eggCountRange>1</eggCountRange>
         <eggLayFemaleOnly>false</eggLayFemaleOnly>
       </li>
-      <li Class="CompProperties_Power">
-        <compClass>PokeWorld.CompPokemonPower</compClass>
-        <basePowerConsumption>-32.50</basePowerConsumption>
-        <transmitsPower>true</transmitsPower>
-      </li>
     </comps>
     <statBases>
       <MoveSpeed>3.8</MoveSpeed>
@@ -13285,11 +13270,6 @@
         <eggProgressUnfertilizedMax>0</eggProgressUnfertilizedMax>
         <eggCountRange>1</eggCountRange>
         <eggLayFemaleOnly>false</eggLayFemaleOnly>
-      </li>
-      <li Class="CompProperties_Power">
-        <compClass>PokeWorld.CompPokemonPower</compClass>
-        <basePowerConsumption>-46.50</basePowerConsumption>
-        <transmitsPower>true</transmitsPower>
       </li>
     </comps>
     <statBases>
@@ -16196,11 +16176,6 @@
         <eggCountRange>1</eggCountRange>
         <eggLayFemaleOnly>false</eggLayFemaleOnly>
       </li>
-      <li Class="CompProperties_Power">
-        <compClass>PokeWorld.CompPokemonPower</compClass>
-        <basePowerConsumption>-33.00</basePowerConsumption>
-        <transmitsPower>true</transmitsPower>
-      </li>
     </comps>
     <statBases>
       <MoveSpeed>5.0</MoveSpeed>
@@ -16359,11 +16334,6 @@
         <eggProgressUnfertilizedMax>0</eggProgressUnfertilizedMax>
         <eggCountRange>1</eggCountRange>
         <eggLayFemaleOnly>false</eggLayFemaleOnly>
-      </li>
-      <li Class="CompProperties_Power">
-        <compClass>PokeWorld.CompPokemonPower</compClass>
-        <basePowerConsumption>-49.00</basePowerConsumption>
-        <transmitsPower>true</transmitsPower>
       </li>
     </comps>
     <statBases>
@@ -20138,11 +20108,6 @@
         <eggProgressUnfertilizedMax>0</eggProgressUnfertilizedMax>
         <eggCountRange>1</eggCountRange>
       </li>
-      <li Class="CompProperties_Power">
-        <compClass>PokeWorld.CompPokemonPower</compClass>
-        <basePowerConsumption>-49.00</basePowerConsumption>
-        <transmitsPower>true</transmitsPower>
-      </li>
     </comps>
     <statBases>
       <MoveSpeed>5.1</MoveSpeed>
@@ -21742,11 +21707,6 @@
         <eggLayIntervalDays>11</eggLayIntervalDays>
         <eggProgressUnfertilizedMax>0</eggProgressUnfertilizedMax>
         <eggCountRange>1</eggCountRange>
-      </li>
-      <li Class="CompProperties_Power">
-        <compClass>PokeWorld.CompPokemonPower</compClass>
-        <basePowerConsumption>-52.50</basePowerConsumption>
-        <transmitsPower>true</transmitsPower>
       </li>
     </comps>
     <statBases>
@@ -23416,11 +23376,6 @@
         </EVYields>
         <catchRate>3</catchRate>
         <shinyChance>0.00125</shinyChance>
-      </li>
-      <li Class="CompProperties_Power">
-        <compClass>PokeWorld.CompPokemonPower</compClass>
-        <basePowerConsumption>-58.00</basePowerConsumption>
-        <transmitsPower>true</transmitsPower>
       </li>
     </comps>
     <statBases>
@@ -27599,11 +27554,6 @@
         <eggProgressUnfertilizedMax>0</eggProgressUnfertilizedMax>
         <eggCountRange>1</eggCountRange>
       </li>
-      <li Class="CompProperties_Power">
-        <compClass>PokeWorld.CompPokemonPower</compClass>
-        <basePowerConsumption>-33.00</basePowerConsumption>
-        <transmitsPower>true</transmitsPower>
-      </li>
     </comps>
     <statBases>
       <MoveSpeed>4.5</MoveSpeed>
@@ -27775,11 +27725,6 @@
         <eggProgressUnfertilizedMax>0</eggProgressUnfertilizedMax>
         <eggCountRange>1</eggCountRange>
       </li>
-      <li Class="CompProperties_Power">
-        <compClass>PokeWorld.CompPokemonPower</compClass>
-        <basePowerConsumption>-46.00</basePowerConsumption>
-        <transmitsPower>true</transmitsPower>
-      </li>
     </comps>
     <statBases>
       <MoveSpeed>4.5</MoveSpeed>
@@ -27936,11 +27881,6 @@
             <weight>0.01</weight>
           </li>
         </forms>
-      </li>
-      <li Class="CompProperties_Power">
-        <compClass>PokeWorld.CompPokemonPower</compClass>
-        <basePowerConsumption>-20.50</basePowerConsumption>
-        <transmitsPower>true</transmitsPower>
       </li>
     </comps>
     <statBases>
@@ -29024,11 +28964,6 @@
         <eggProgressUnfertilizedMax>0</eggProgressUnfertilizedMax>
         <eggCountRange>1</eggCountRange>
       </li>
-      <li Class="CompProperties_Power">
-        <compClass>PokeWorld.CompPokemonPower</compClass>
-        <basePowerConsumption>-28.00</basePowerConsumption>
-        <transmitsPower>true</transmitsPower>
-      </li>
     </comps>
     <statBases>
       <MoveSpeed>3.3</MoveSpeed>
@@ -29206,11 +29141,6 @@
         <eggLayIntervalDays>6</eggLayIntervalDays>
         <eggProgressUnfertilizedMax>0</eggProgressUnfertilizedMax>
         <eggCountRange>1</eggCountRange>
-      </li>
-      <li Class="CompProperties_Power">
-        <compClass>PokeWorld.CompPokemonPower</compClass>
-        <basePowerConsumption>-36.50</basePowerConsumption>
-        <transmitsPower>true</transmitsPower>
       </li>
     </comps>
     <statBases>
@@ -29393,11 +29323,6 @@
         <eggLayIntervalDays>6</eggLayIntervalDays>
         <eggProgressUnfertilizedMax>0</eggProgressUnfertilizedMax>
         <eggCountRange>1</eggCountRange>
-      </li>
-      <li Class="CompProperties_Power">
-        <compClass>PokeWorld.CompPokemonPower</compClass>
-        <basePowerConsumption>-51.00</basePowerConsumption>
-        <transmitsPower>true</transmitsPower>
       </li>
     </comps>
     <statBases>
@@ -39068,11 +38993,6 @@
         <catchRate>45</catchRate>
         <shinyChance>0.00125</shinyChance>
       </li>
-      <li Class="CompProperties_Power">
-        <compClass>PokeWorld.CompPokemonPower</compClass>
-        <basePowerConsumption>-36.00</basePowerConsumption>
-        <transmitsPower>true</transmitsPower>
-      </li>
     </comps>
     <statBases>
       <MoveSpeed>5.0</MoveSpeed>
@@ -39712,11 +39632,6 @@
         </EVYields>
         <catchRate>3</catchRate>
         <shinyChance>0.00125</shinyChance>
-      </li>
-      <li Class="CompProperties_Power">
-        <compClass>PokeWorld.CompPokemonPower</compClass>
-        <basePowerConsumption>-58.00</basePowerConsumption>
-        <transmitsPower>true</transmitsPower>
       </li>
     </comps>
     <statBases>
@@ -50304,11 +50219,6 @@
         <eggProgressUnfertilizedMax>0</eggProgressUnfertilizedMax>
         <eggCountRange>1</eggCountRange>
       </li>
-      <li Class="CompProperties_Power">
-        <compClass>PokeWorld.CompPokemonPower</compClass>
-        <basePowerConsumption>-29.50</basePowerConsumption>
-        <transmitsPower>true</transmitsPower>
-      </li>
     </comps>
     <statBases>
       <MoveSpeed>4.5</MoveSpeed>
@@ -50475,11 +50385,6 @@
         <eggProgressUnfertilizedMax>0</eggProgressUnfertilizedMax>
         <eggCountRange>1</eggCountRange>
       </li>
-      <li Class="CompProperties_Power">
-        <compClass>PokeWorld.CompPokemonPower</compClass>
-        <basePowerConsumption>-47.50</basePowerConsumption>
-        <transmitsPower>true</transmitsPower>
-      </li>
     </comps>
     <statBases>
       <MoveSpeed>5.1</MoveSpeed>
@@ -50632,11 +50537,6 @@
         <eggLayIntervalDays>6</eggLayIntervalDays>
         <eggProgressUnfertilizedMax>0</eggProgressUnfertilizedMax>
         <eggCountRange>1</eggCountRange>
-      </li>
-      <li Class="CompProperties_Power">
-        <compClass>PokeWorld.CompPokemonPower</compClass>
-        <basePowerConsumption>-40.50</basePowerConsumption>
-        <transmitsPower>true</transmitsPower>
       </li>
     </comps>
     <statBases>
@@ -50791,11 +50691,6 @@
         <eggLayIntervalDays>6</eggLayIntervalDays>
         <eggProgressUnfertilizedMax>0</eggProgressUnfertilizedMax>
         <eggCountRange>1</eggCountRange>
-      </li>
-      <li Class="CompProperties_Power">
-        <compClass>PokeWorld.CompPokemonPower</compClass>
-        <basePowerConsumption>-40.50</basePowerConsumption>
-        <transmitsPower>true</transmitsPower>
       </li>
     </comps>
     <statBases>
@@ -65684,11 +65579,6 @@
         <eggProgressUnfertilizedMax>0</eggProgressUnfertilizedMax>
         <eggCountRange>1</eggCountRange>
       </li>
-      <li Class="CompProperties_Power">
-        <compClass>PokeWorld.CompPokemonPower</compClass>
-        <basePowerConsumption>-26.30</basePowerConsumption>
-        <transmitsPower>true</transmitsPower>
-      </li>
     </comps>
     <statBases>
       <MoveSpeed>3.8</MoveSpeed>
@@ -65857,11 +65747,6 @@
         <eggProgressUnfertilizedMax>0</eggProgressUnfertilizedMax>
         <eggCountRange>1</eggCountRange>
       </li>
-      <li Class="CompProperties_Power">
-        <compClass>PokeWorld.CompPokemonPower</compClass>
-        <basePowerConsumption>-36.30</basePowerConsumption>
-        <transmitsPower>true</transmitsPower>
-      </li>
     </comps>
     <statBases>
       <MoveSpeed>4.3</MoveSpeed>
@@ -66018,11 +65903,6 @@
         <eggLayIntervalDays>6</eggLayIntervalDays>
         <eggProgressUnfertilizedMax>0</eggProgressUnfertilizedMax>
         <eggCountRange>1</eggCountRange>
-      </li>
-      <li Class="CompProperties_Power">
-        <compClass>PokeWorld.CompPokemonPower</compClass>
-        <basePowerConsumption>-52.30</basePowerConsumption>
-        <transmitsPower>true</transmitsPower>
       </li>
     </comps>
     <statBases>
@@ -67996,11 +67876,6 @@
         <eggLayIntervalDays>3</eggLayIntervalDays>
         <eggProgressUnfertilizedMax>0</eggProgressUnfertilizedMax>
         <eggCountRange>1</eggCountRange>
-      </li>
-      <li Class="CompProperties_Power">
-        <compClass>PokeWorld.CompPokemonPower</compClass>
-        <basePowerConsumption>-40.50</basePowerConsumption>
-        <transmitsPower>true</transmitsPower>
       </li>
     </comps>
     <statBases>
@@ -75328,11 +75203,6 @@
         <eggCountRange>1</eggCountRange>
         <eggLayFemaleOnly>false</eggLayFemaleOnly>
       </li>
-      <li Class="CompProperties_Power">
-        <compClass>PokeWorld.CompPokemonPower</compClass>
-        <basePowerConsumption>-53.50</basePowerConsumption>
-        <transmitsPower>true</transmitsPower>
-      </li>
     </comps>
     <statBases>
       <MoveSpeed>4.3</MoveSpeed>
@@ -75967,11 +75837,6 @@
         <eggLayIntervalDays>8</eggLayIntervalDays>
         <eggProgressUnfertilizedMax>0</eggProgressUnfertilizedMax>
         <eggCountRange>1</eggCountRange>
-      </li>
-      <li Class="CompProperties_Power">
-        <compClass>PokeWorld.CompPokemonPower</compClass>
-        <basePowerConsumption>-54.00</basePowerConsumption>
-        <transmitsPower>true</transmitsPower>
       </li>
     </comps>
     <statBases>
@@ -78125,11 +77990,6 @@
         <eggProgressUnfertilizedMax>0</eggProgressUnfertilizedMax>
         <eggCountRange>1</eggCountRange>
         <eggLayFemaleOnly>false</eggLayFemaleOnly>
-      </li>
-      <li Class="CompProperties_Power">
-        <compClass>PokeWorld.CompPokemonPower</compClass>
-        <basePowerConsumption>-44.00</basePowerConsumption>
-        <transmitsPower>true</transmitsPower>
       </li>
     </comps>
     <statBases>

@@ -1019,14 +1019,14 @@ def main():
             f.write("        <heatPerSecond>%.2f</heatPerSecond>\n"%(-totalStat / 200))
             f.write("        <heatPushMinTemperature>-8</heatPushMinTemperature>\n")
             f.write("      </li>\n")
-        
+        """
         if(type1 == "Electric" or type2 == "Electric"):
             f.write('      <li Class="CompProperties_Power">\n') 
             f.write("        <compClass>PokeWorld.CompPokemonPower</compClass>\n")
             f.write("        <basePowerConsumption>%.2f</basePowerConsumption>\n"%(-totalStat / 10))
             f.write("        <transmitsPower>true</transmitsPower>\n")
             f.write("      </li>\n")
-                
+        """      
         f.write("    </comps>\n")
     
     
