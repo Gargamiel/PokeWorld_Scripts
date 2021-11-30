@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import math
 import pandas as pd
 import numpy as np
 import codecs
@@ -249,6 +250,34 @@ def GetCSVData(filePath):
     data = pd.read_csv(filePath, keep_default_na=False, encoding = 'latin1')    
     return data
 
+def GetGlowBothTypes(type1, type2):
+    value = GetGlow(type1)
+    if (value[0] == False):
+        value = GetGlow(type2)     
+    return value
+
+def GetGlow(type1):
+    flag = True
+    if(type1 == "Ghost"):
+        colors = (112,88,152)
+    elif(type1 == "Fire"):
+        colors = (240,128,48)
+    elif(type1 == "Electric"):
+        colors = (248,208,48)
+    elif(type1 == "Ice"):
+        colors = (152,216,216)
+    elif(type1 == "Dragon"):
+        colors = (112,56,248)
+    elif(type1 == "Dark"):
+        colors = (112,88,72)
+    elif(type1 == "Fairy"):
+        colors = (238,153,172)
+    else:
+        flag = False
+        colors = ()
+        
+    return [flag, colors]
+
 def main():  
     PokemonData = GetCSVData("Data/DataPokemon.csv")   
     EvolutionData = GetCSVData("Data/DataEvolutions.csv")
@@ -376,7 +405,8 @@ def main():
         canEvolve = GetCanEvolve(isEvolutionMax)
         ShadowVolume1 = shadowVolumeMult_1*drawSize
         ShadowVolume2 = shadowVolumeMult_2*drawSize
-        ShadowVolume3 = shadowVolumeMult_3*drawSize     
+        ShadowVolume3 = shadowVolumeMult_3*drawSize  
+        shouldGlow, colors = GetGlowBothTypes(type1, type2)
           
         
         """We write everything for 1 Pokemon in the def file"""
@@ -854,24 +884,30 @@ def main():
         if((type1 == "Fire" or type2 == "Fire") and not(type1 == "Ice" or type2 == "Ice")):
             f.write('      <li Class="CompProperties_HeatPusher">\n') 
             f.write("        <compClass>PokeWorld.CompPokemonHeatPusher</compClass>\n")
-            f.write("        <heatPerSecond>%.2f</heatPerSecond>\n"%(totalStat / 200))
+            f.write("        <heatPerSecond>%.2f</heatPerSecond>\n"%(totalStat / 220))
             f.write("        <heatPushMaxTemperature>32</heatPushMaxTemperature>\n")
             f.write("      </li>\n") 
             
         if((type1 == "Ice" or type2 == "Ice") and not(type1 == "Fire" or type2 == "Fire")):
             f.write('      <li Class="CompProperties_HeatPusher">\n') 
             f.write("        <compClass>PokeWorld.CompPokemonHeatPusher</compClass>\n")
-            f.write("        <heatPerSecond>%.2f</heatPerSecond>\n"%(-totalStat / 200))
+            f.write("        <heatPerSecond>%.2f</heatPerSecond>\n"%(-totalStat / 220))
             f.write("        <heatPushMinTemperature>-8</heatPushMinTemperature>\n")
             f.write("      </li>\n")
-        """
+
         if(type1 == "Electric" or type2 == "Electric"):
             f.write('      <li Class="CompProperties_Power">\n') 
             f.write("        <compClass>PokeWorld.CompPokemonPower</compClass>\n")
-            f.write("        <basePowerConsumption>%.2f</basePowerConsumption>\n"%(-totalStat / 10))
-            f.write("        <transmitsPower>true</transmitsPower>\n")
+            f.write("        <basePowerConsumption>%.2f</basePowerConsumption>\n"%(-totalStat / 8))
             f.write("      </li>\n")
-        """      
+
+        """
+        if(shouldGlow):
+            f.write('      <li Class="CompProperties_Glower">\n') 
+            f.write("        <glowRadius>%d</glowRadius>\n"% (math.ceil(totalStat / 200)))
+            f.write("        <glowColor>(%d,%d,%d,0)</glowColor>\n"% (colors[0], colors[1], colors[2]))
+            f.write("      </li>\n")
+        """
         f.write("    </comps>\n")
     
     
@@ -887,6 +923,12 @@ def main():
         f.write("    <inspectorTabs>\n")
         f.write("      <li>PokeWorld.ITab_Pawn_Moves</li>\n")
         f.write("    </inspectorTabs>\n")
+        
+        if(type1 == "Steel" or type2 == "Steel"):
+            f.write("    <soundDrop>ChunkSlag_Drop</soundDrop>\n")
+        elif(type1 == "Rock" or type2 == "Rock"):
+            f.write("    <soundDrop>ChunkRock_Drop</soundDrop>\n")
+
     
         f.write("    <race>\n")
         f.write("      <body>%s</body>\n"% (body))
@@ -934,6 +976,7 @@ def main():
         f.write("      <soundMeleeHitPawn>Pawn_Melee_SmallScratch_HitPawn</soundMeleeHitPawn>\n")
         f.write("      <soundMeleeHitBuilding>Pawn_Melee_SmallScratch_HitBuilding</soundMeleeHitBuilding>\n")
         f.write("      <soundMeleeMiss>Pawn_Melee_SmallScratch_Miss</soundMeleeMiss>\n")
+        f.write("      <soundCallIntervalRange>3000~6000</soundCallIntervalRange>\n")
         f.write("    </race>\n")
         f.write("    <recipes>\n")   
         f.write("      <li>PW_AdministerPotion</li>\n")
