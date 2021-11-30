@@ -15562,7 +15562,7 @@
           <texPath>Things/Pawn/Pokemon/Gen_1/095_Onix/Onix</texPath>
           <drawSize>4.6</drawSize>
           <shadowData>
-            <volume>(1.62, 1.15, 1.15)</volume>
+            <volume>(1.61, 1.15, 1.15)</volume>
             <offset>(0.00, 0.00, -0.30)</offset>
           </shadowData>
         </bodyGraphicData>
@@ -52598,9 +52598,9 @@
       <li>
         <bodyGraphicData>
           <texPath>Things/Pawn/Pokemon/Gen_3/321_Wailord/Wailord</texPath>
-          <drawSize>12.0</drawSize>
+          <drawSize>12.1</drawSize>
           <shadowData>
-            <volume>(4.20, 3.00, 3.00)</volume>
+            <volume>(4.22, 3.01, 3.01)</volume>
             <offset>(0.00, 0.00, -0.30)</offset>
           </shadowData>
         </bodyGraphicData>
@@ -76206,7 +76206,7 @@
           <texPath>Things/Pawn/Pokemon/Gen_4/464_Rhyperior/Rhyperior</texPath>
           <drawSize>2.7</drawSize>
           <shadowData>
-            <volume>(0.93, 0.66, 0.66)</volume>
+            <volume>(0.93, 0.67, 0.67)</volume>
             <offset>(0.00, 0.00, -0.30)</offset>
           </shadowData>
         </bodyGraphicData>
