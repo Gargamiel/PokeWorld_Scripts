@@ -3,29 +3,24 @@ import math
 import pandas as pd
 import numpy as np
 import codecs
+import string
 
-def LagrangeInterpol(x0,y0,x1,y1,x2,y2,x3,y3,x4,y4,xp):
-    x0,y0,x1,y1,x2,y2,x3,y3,x4,y4,xp = float(x0),float(y0),float(x1),float(y1),float(x2),float(y2),float(x3),float(y3),float(x4),float(y4),float(xp)
-    n = 5
-    x = np.zeros((n))
-    y = np.zeros((n))
-    x = [x0,x1,x2,x3,x4]
-    y = [y0,y1,y2,y3,y4]
+def LagrangeInterpol(x, y, xp):
     yp = 0
-    for i in range(n):
+    for i in range(5):
         p = 1
-        for j in range(n):
+        for j in range(5):
             if i != j:
                 p = p * (xp - x[j])/(x[i] - x[j])
         
-        yp = yp + p * y[i]    
+        yp = yp + p * y[i] 
     return yp
 
 def LagrangeInterpolSpeed(xp):
-    return LagrangeInterpol(5,1,30,3,50,4,135,6,160,8,xp)
+    return LagrangeInterpol([5, 30, 50, 135, 160], [1, 3, 4, 6, 8], xp)
 
 def LagrangeInterpolSize(xp):
-    return LagrangeInterpol(0.2,1.5,1,2,5,3.5,10,5,14.5,6,xp)
+    return LagrangeInterpol([0.2, 1, 5, 10, 14], [1.5, 2, 3.5, 5, 6], xp)
 
 def GetMinimumComfortableTemperature(pokemonType1, pokemonType2):
     MinimumTempType1 = GetMinTemp(pokemonType1)
@@ -48,82 +43,38 @@ def GetMaximumComfortableTemperature(pokemonType1, pokemonType2):
         return MaximumTempType2
     
 def GetMinTemp(pokemonType):
-    if(pokemonType == "Normal"):
-        return -30
-    elif(pokemonType == "Fighting"):
-        return -30
-    elif(pokemonType == "Flying"):
-        return -25
-    elif(pokemonType == "Poison"):
-        return -30
-    elif(pokemonType == "Ground"):
-        return -50
-    elif(pokemonType == "Rock"):
-        return -50
-    elif(pokemonType == "Bug"):
-        return -25
-    elif(pokemonType == "Ghost"):
-        return -40
-    elif(pokemonType == "Steel"):
-        return -50
-    elif(pokemonType == "Fire"):
-        return -15
-    elif(pokemonType == "Water"):
-        return -25
-    elif(pokemonType == "Grass"): 
-        return -25
-    elif(pokemonType == "Electric"):
-        return -30
-    elif(pokemonType == "Psychic"):
-        return -30
-    elif(pokemonType == "Ice"):
+    if(pokemonType == "Ice"):
         return -100
     elif(pokemonType == "Dragon"):
         return -60
-    elif(pokemonType == "Dark"):
+    elif(pokemonType in ["Ground", "Rock", "Steel"]):
+        return -50
+    elif(pokemonType == "Ghost"):
+        return -40
+    elif(pokemonType in ["Normal", "Fighting", "Poison", "Electric", "Psychic", "Dark", "Fairy"]):
         return -30
-    elif(pokemonType == "Fairy"):
-        return -30
+    elif(pokemonType in ["Flying", "Bug", "Water", "Grass"]):
+        return -25
+    elif(pokemonType == "Fire"):
+        return -15
     else:
         return None
 
 def GetMaxTemp(pokemonType):
-    if(pokemonType == "Normal"):
-        return 45
-    elif(pokemonType == "Fighting"):
-        return 45
-    elif(pokemonType == "Flying"):
-        return 45
-    elif(pokemonType == "Poison"):
-        return 45
-    elif(pokemonType == "Ground"):
-        return 55
-    elif(pokemonType == "Rock"):
-        return 55
-    elif(pokemonType == "Bug"):
+    if(pokemonType == "Ice"):
+        return 20
+    elif(pokemonType in ["Bug", "Water", "Grass"]):
         return 40
-    elif(pokemonType == "Ghost"):
+    elif(pokemonType in ["Normal", "Fighting", "Flying", "Poison", "Ghost", "Electric", "Psychic", "Dark", "Fairy"]):
         return 45
+    elif(pokemonType in ["Ground", "Rock"]):
+        return 55
     elif(pokemonType == "Steel"):
         return 60
-    elif(pokemonType == "Fire"):
-        return 100
-    elif(pokemonType == "Water"):
-        return 40
-    elif(pokemonType == "Grass"): 
-        return 40
-    elif(pokemonType == "Electric"):
-        return 45
-    elif(pokemonType == "Psychic"):
-        return 45
-    elif(pokemonType == "Ice"):
-        return 20
     elif(pokemonType == "Dragon"):
         return 70
-    elif(pokemonType == "Dark"):
-        return 45
-    elif(pokemonType == "Fairy"):
-        return 45
+    elif(pokemonType == "Fire"):
+        return 100
     else:
         return None
     
@@ -146,19 +97,11 @@ def GetToxicSensitivity(type1, type2):
     return toxicSensitivity
         
 def GetToxicMult(pokemonType):
-    if(pokemonType == "Poison"):
+    if(pokemonType in ["Poison", "Steel"]):
         return 0
-    elif(pokemonType == "Ground"):
+    elif(pokemonType in ["Ground", "Rock", "Ghost"]):
         return 0.5
-    elif(pokemonType == "Rock"):
-        return 0.5
-    elif(pokemonType == "Ghost"):
-        return 0.5
-    elif(pokemonType == "Steel"):
-        return 0
-    elif(pokemonType == "Grass"): 
-        return 2
-    elif(pokemonType == "Fairy"):
+    elif(pokemonType in ["Grass", "Fairy"]): 
         return 2
     else:
         return 1
@@ -282,6 +225,7 @@ def GetCanEvolve(isEvolutionMax):
 
 def GetTradeTags(rarity, evolutionTier, isBaby, isLegendary, isFossil, isParticular):
     tradeTags = []
+    rarity = int(rarity)
     if (isBaby or isLegendary or isFossil or isParticular or rarity >= 8):
         tradeTags=["PW_PokemonExotic"]    
     elif (rarity >= 6):
@@ -303,7 +247,7 @@ def FixNameIfNidoran(fullName, defName):
         return fullName
 
 def GetCSVData(filePath):
-    data = pd.read_csv(filePath,keep_default_na=False)    
+    data = pd.read_csv(filePath, keep_default_na=False, encoding = 'latin1')    
     return data
 
 def GetGlowBothTypes(type1, type2):
@@ -333,7 +277,6 @@ def GetGlow(type1):
         colors = ()
         
     return [flag, colors]
-
 
 def main():  
     PokemonData = GetCSVData("Data/DataPokemon.csv")   
@@ -607,110 +550,11 @@ def main():
             f.write("        <showFormLabel>true</showFormLabel>\n")
             f.write("        <forms>\n")
             
-            f.write("          <li>\n")
-            f.write("            <label>%s</label>\n"% ("A"))
-            f.write("            <texPathKey>%s</texPathKey>\n"% ("A"))
-            f.write("          </li>\n") 
-            f.write("          <li>\n")
-            f.write("            <label>%s</label>\n"% ("B"))
-            f.write("            <texPathKey>%s</texPathKey>\n"% ("B"))
-            f.write("          </li>\n") 
-            f.write("          <li>\n")
-            f.write("            <label>%s</label>\n"% ("C"))
-            f.write("            <texPathKey>%s</texPathKey>\n"% ("C"))
-            f.write("          </li>\n") 
-            f.write("          <li>\n")
-            f.write("            <label>%s</label>\n"% ("D"))
-            f.write("            <texPathKey>%s</texPathKey>\n"% ("D"))
-            f.write("          </li>\n") 
-            f.write("          <li>\n")
-            f.write("            <label>%s</label>\n"% ("E"))
-            f.write("            <texPathKey>%s</texPathKey>\n"% ("E"))
-            f.write("          </li>\n") 
-            f.write("          <li>\n")
-            f.write("            <label>%s</label>\n"% ("F"))
-            f.write("            <texPathKey>%s</texPathKey>\n"% ("F"))
-            f.write("          </li>\n") 
-            f.write("          <li>\n")
-            f.write("            <label>%s</label>\n"% ("G"))
-            f.write("            <texPathKey>%s</texPathKey>\n"% ("G"))
-            f.write("          </li>\n") 
-            f.write("          <li>\n")
-            f.write("            <label>%s</label>\n"% ("H"))
-            f.write("            <texPathKey>%s</texPathKey>\n"% ("H"))
-            f.write("          </li>\n") 
-            f.write("          <li>\n")
-            f.write("            <label>%s</label>\n"% ("I"))
-            f.write("            <texPathKey>%s</texPathKey>\n"% ("I"))
-            f.write("          </li>\n") 
-            f.write("          <li>\n")
-            f.write("            <label>%s</label>\n"% ("J"))
-            f.write("            <texPathKey>%s</texPathKey>\n"% ("J"))
-            f.write("          </li>\n") 
-            f.write("          <li>\n")
-            f.write("            <label>%s</label>\n"% ("K"))
-            f.write("            <texPathKey>%s</texPathKey>\n"% ("K"))
-            f.write("          </li>\n") 
-            f.write("          <li>\n")
-            f.write("            <label>%s</label>\n"% ("L"))
-            f.write("            <texPathKey>%s</texPathKey>\n"% ("L"))
-            f.write("          </li>\n") 
-            f.write("          <li>\n")
-            f.write("            <label>%s</label>\n"% ("M"))
-            f.write("            <texPathKey>%s</texPathKey>\n"% ("M"))
-            f.write("          </li>\n") 
-            f.write("          <li>\n")
-            f.write("            <label>%s</label>\n"% ("N"))
-            f.write("            <texPathKey>%s</texPathKey>\n"% ("N"))
-            f.write("          </li>\n") 
-            f.write("          <li>\n")
-            f.write("            <label>%s</label>\n"% ("O"))
-            f.write("            <texPathKey>%s</texPathKey>\n"% ("O"))
-            f.write("          </li>\n") 
-            f.write("          <li>\n")
-            f.write("            <label>%s</label>\n"% ("P"))
-            f.write("            <texPathKey>%s</texPathKey>\n"% ("P"))
-            f.write("          </li>\n") 
-            f.write("          <li>\n")
-            f.write("            <label>%s</label>\n"% ("Q"))
-            f.write("            <texPathKey>%s</texPathKey>\n"% ("Q"))
-            f.write("          </li>\n") 
-            f.write("          <li>\n")
-            f.write("            <label>%s</label>\n"% ("R"))
-            f.write("            <texPathKey>%s</texPathKey>\n"% ("R"))
-            f.write("          </li>\n") 
-            f.write("          <li>\n")
-            f.write("            <label>%s</label>\n"% ("S"))
-            f.write("            <texPathKey>%s</texPathKey>\n"% ("S"))
-            f.write("          </li>\n") 
-            f.write("          <li>\n")
-            f.write("            <label>%s</label>\n"% ("T"))
-            f.write("            <texPathKey>%s</texPathKey>\n"% ("T"))
-            f.write("          </li>\n") 
-            f.write("          <li>\n")
-            f.write("            <label>%s</label>\n"% ("U"))
-            f.write("            <texPathKey>%s</texPathKey>\n"% ("U"))
-            f.write("          </li>\n") 
-            f.write("          <li>\n")
-            f.write("            <label>%s</label>\n"% ("V"))
-            f.write("            <texPathKey>%s</texPathKey>\n"% ("V"))
-            f.write("          </li>\n") 
-            f.write("          <li>\n")
-            f.write("            <label>%s</label>\n"% ("W"))
-            f.write("            <texPathKey>%s</texPathKey>\n"% ("W"))
-            f.write("          </li>\n") 
-            f.write("          <li>\n")
-            f.write("            <label>%s</label>\n"% ("X"))
-            f.write("            <texPathKey>%s</texPathKey>\n"% ("X"))
-            f.write("          </li>\n") 
-            f.write("          <li>\n")
-            f.write("            <label>%s</label>\n"% ("Y"))
-            f.write("            <texPathKey>%s</texPathKey>\n"% ("Y"))
-            f.write("          </li>\n") 
-            f.write("          <li>\n")
-            f.write("            <label>%s</label>\n"% ("Z"))
-            f.write("            <texPathKey>%s</texPathKey>\n"% ("Z")) 
-            f.write("          </li>\n") 
+            for letter in list(string.ascii_uppercase):
+                f.write("          <li>\n")
+                f.write(f"            <label>{letter}</label>\n")
+                f.write(f"            <texPathKey>{letter}</texPathKey>\n")
+                f.write("          </li>\n")  
             f.write("          <li>\n")
             f.write("            <label>%s</label>\n"% ("!"))
             f.write("            <texPathKey>%s</texPathKey>\n"% ("Exclamation"))
@@ -1017,9 +861,10 @@ def main():
                 if pokemonDefName == "Manaphy":                
                     f.write("        <eggFertilizedDef>PW_EggPhione</eggFertilizedDef>\n")
                 else :
-                    for indexOeuf in range(0,493):
+                    for indexOeuf, DexName in enumerate(defNameList):
+                        ######################
                         if pokemonEvolutionLine[indexOeuf] == evolutionLine and pokemonEvolutionTier[indexOeuf] == 1:
-                            f.write("        <eggFertilizedDef>PW_Egg%s</eggFertilizedDef>\n"% (defNameList[indexOeuf]))
+                            f.write("        <eggFertilizedDef>PW_Egg%s</eggFertilizedDef>\n"% (DexName))
                             break
                 f.write("        <eggFertilizationCountMax>1</eggFertilizationCountMax>\n")
                 f.write("        <eggLayIntervalDays>%d</eggLayIntervalDays>\n"% (eggLayDays))
