@@ -4,6 +4,8 @@ import pandas as pd
 import numpy as np
 import codecs
 import string
+import json
+from lxml.etree import Element, SubElement, Comment, ElementTree, tostring, indent
 
 def LagrangeInterpol(x, y, xp):
     yp = 0
@@ -106,30 +108,14 @@ def GetToxicMult(pokemonType):
     else:
         return 1
 
-def GetDescription(i, descriptionFile):
-    descriptionFile = codecs.open(descriptionFile,"r", "utf-8")   
-    for fileLine in range(0,i):
-        descriptionFile.readline()
-        descriptionFile.readline()
+def GetDescription(descriptionFile):
     desc1 = descriptionFile.readline()
-    desc2 = descriptionFile.readline()   
-    descriptionFile.close()   
+    desc2 = descriptionFile.readline()    
     if desc1 != desc2:
-        description = desc1.strip() + '\\n' + desc2.strip()
+        description = desc1.strip() + "\\n" + desc2.strip()
     else:
         description = desc1.strip()
     return description
-    
-def GetGenerationFolderTexPath(i):
-    if(i < 151):
-        texPath = "Things/Pawn/Pokemon/Gen_1/"
-    elif(i < 251):
-        texPath = "Things/Pawn/Pokemon/Gen_2/"
-    elif (i < 386):
-        texPath = "Things/Pawn/Pokemon/Gen_3/"
-    else:
-        texPath = "Things/Pawn/Pokemon/Gen_4/"
-    return texPath
 
 def GetGeneration(i):
     if(i < 151):
@@ -138,8 +124,16 @@ def GetGeneration(i):
         generation = 2
     elif (i < 386):
         generation = 3
-    else:
+    elif (i < 493):
         generation = 4
+    elif (i < 649):
+        generation = 5
+    elif (i < 721):
+        generation = 6
+    elif (i < 809):
+        generation = 7
+    else:
+        generation = 8
     return generation
 
 def GetDrawSize(size, sizeMult):
@@ -157,9 +151,6 @@ def GetTexturePathMale(texPath, i, pokemonDefName):
 def GetTexturePathFemale(texPath, i, pokemonDefName):
     return "%s%03d_%s/%sFemale"% (texPath, i,pokemonDefName,pokemonDefName)
 
-def GetBody(bodyShape):
-    return "PW_" + bodyShape
-
 def GetAgeExpectancy(wildLevelMax, isLegendary, isBaby):
     if(isLegendary):
         ageExpectancy = 100 * wildLevelMax
@@ -168,13 +159,6 @@ def GetAgeExpectancy(wildLevelMax, isLegendary, isBaby):
     else:
         ageExpectancy = wildLevelMax
     return ageExpectancy
-
-def GetWildness(rarity, isBaby):
-    if(isBaby):
-        wildness = 0
-    else:
-        wildness = rarity/10
-    return wildness
 
 def GetSpawnRate(rarity, isBaby, isLegendary, isFossil, isParticular):     
     if(isBaby or isLegendary or isFossil or isParticular):
@@ -190,13 +174,6 @@ def GetHerdAnimal(spawnRate, evolutionTier):
         herdAnimal = "false"
     return herdAnimal
 
-def GetPackAnimal(baseBodySize):   
-    if (baseBodySize >= 0.6):
-        packAnimal = "true"
-    else:
-        packAnimal = "false"
-    return packAnimal
-
 def GetStarter(evolutionTier, isEvolutionMax, rarity, isFossil, isLegendary, isParticular, isBaby):
     if(evolutionTier==1 and isEvolutionMax == 0 and rarity <= 3 and isFossil==0 and isLegendary == 0 and isParticular == 0 and isBaby == 0):
         starter = "true"
@@ -204,24 +181,11 @@ def GetStarter(evolutionTier, isEvolutionMax, rarity, isFossil, isLegendary, isP
         starter = "false"
     return starter  
 
-def GetManhunterOnDamageChance(rarity):
-    return rarity / 10
-
-def GetManhunterOnTameFailChance(rarity):      
-    return rarity / 10
-
 def GetEcoSystemWeight(size):
     ecoSystemWeight = size*0.8
     if (ecoSystemWeight > 2):
         ecoSystemWeight = 2
     return ecoSystemWeight
-
-def GetCanEvolve(isEvolutionMax):
-    if isEvolutionMax:
-        canEvolve = "false"
-    else:
-        canEvolve = "true"
-    return canEvolve
 
 def GetTradeTags(rarity, evolutionTier, isBaby, isLegendary, isFossil, isParticular):
     tradeTags = []
@@ -247,7 +211,7 @@ def FixNameIfNidoran(fullName, defName):
         return fullName
 
 def GetCSVData(filePath):
-    data = pd.read_csv(filePath, keep_default_na=False, encoding = 'latin1')    
+    data = pd.read_csv(filePath, keep_default_na=False, encoding = "latin1")    
     return data
 
 def GetGlowBothTypes(type1, type2):
@@ -296,6 +260,23 @@ def main():
     evolRequiredTime = list(EvolutionData.Time)
     evolRequiredGender = list(EvolutionData.Gender)
     evolRequiredItem = list(EvolutionData.Item)
+
+    evolutions = list(zip(evolvingTo, evolvingFrom, evolRequirement, evolLevelMin, 
+        evolFriendshipMin, evolRequiredTime, evolRequiredGender, evolRequiredItem))
+
+    otherEvoRequirements = {
+        "Hitmonlee" : "attack",
+        "Hitmonchan": "defense",
+        "Hitmontop" : "balanced"
+    }
+
+    with open("Data/forms.json", "r") as f:
+        formsData = json.load(f)
+
+    hasForm = list(formsData.keys())
+    
+    for name in [name for name in defNameList if name not in otherEvoRequirements.keys()]:
+        otherEvoRequirements[name] = "none"
     
     movesPokemonId = list(MoveData.DexNumber)
     movesName = list(MoveData.Moves)
@@ -318,19 +299,17 @@ def main():
     petness = 1   
     expYieldMultiplier = 2
     descriptionFile = "pokemonDescription.txt"
+    descriptionFile = open(descriptionFile, "r", encoding = "utf-8")
     texPathDessicated = "Things/Pawn/PokemonDessicated/PokemonDessicated"
     
     """Opening xml file where we write the Pokemon Defs"""
-    f = codecs.open("OutputFiles/Races_Pokemon.xml", "w", "utf-8")
-
-    """writing header"""
-    f.write('<?xml version="1.0" encoding="utf-8" ?>\n')
-    f.write("<Defs>\n\n")
+    #f = codecs.open("OutputFiles/Races_Pokemon.xml", "w", "utf-8")
+    root = Element("Defs")
     
-    for i in range(0,len(defNameList)):
+    for i, pokemonDefName in enumerate(defNameList):
+        print(pokemonDefName)
         """Getting all data from csv file"""
         pokedexNumber = PokemonData.DexNumber[i]
-        pokemonDefName = PokemonData.DefName[i]
         pokemonFullName = PokemonData.Name[i]        
         hpEV = PokemonData.HPEv[i]
         attackEV = PokemonData.AttackEv[i]
@@ -372,13 +351,13 @@ def main():
                
         """Computing other values based on the data"""
         pokemonFullName = FixNameIfNidoran(pokemonFullName, pokemonDefName)      
-        tradeTags = GetTradeTags(rarity, evolutionTier, isBaby, isLegendary, isFossil, isParticular)               
-        texPath = GetGenerationFolderTexPath(i)       
-        generation = GetGeneration(i)      
+        tradeTags = GetTradeTags(rarity, evolutionTier, isBaby, isLegendary, isFossil, isParticular) 
+        generation = GetGeneration(i)              
+        texPath = f"Things/Pawn/Pokemon/Gen_{generation}/"
         ComfyTemperatureMin = GetMinimumComfortableTemperature(type1, type2)
         ComfyTemperatureMax = GetMaximumComfortableTemperature(type1, type2)      
         toxicSensitivity = GetToxicSensitivity(type1, type2)       
-        descriptionFull = GetDescription(i, descriptionFile)        
+        descriptionFull = GetDescription(descriptionFile)        
         drawSize = GetDrawSize(size, sizeMult)
         dessicatedDrawSize = GetDessicatedDrawSize(size, sizeMult, dessicatedDrawSize_Mult)     
         texturePath = GetTexturePath(texPath,i+1,pokemonDefName)
@@ -392,666 +371,358 @@ def main():
         baseBodySize = size/averageHumanSize   
         rimworldSpeed = LagrangeInterpolSpeed(statSpeed)
         leather = GetLeatherType(baseBodySize, eggGroup1, eggGroup2, isLegendary)
-        body = GetBody(bodyShape)        
+        body = "PW_" + bodyShape
         ageExpectancy = GetAgeExpectancy(wildLevelMax, isLegendary, isBaby)
-        wildness = GetWildness(rarity, isBaby)
+        wildness = 0 if isBaby else rarity/10
         spawnRate = GetSpawnRate(rarity, isBaby, isLegendary, isFossil, isParticular)
         herdAnimal = GetHerdAnimal(spawnRate, evolutionTier)
-        packAnimal = GetPackAnimal(baseBodySize)    
+        packAnimal = "true" if baseBodySize >= 0.6 else "false"
         starter = GetStarter(evolutionTier, isEvolutionMax, rarity, isFossil, isLegendary, isParticular, isBaby)
-        manhunterOnDamageChance = GetManhunterOnDamageChance(rarity)
-        manhunterOnTameFailChance = GetManhunterOnTameFailChance(rarity)    
+        manhunterOnDamageChance = rarity / 10
+        manhunterOnTameFailChance = rarity / 10  
         ecoSystemWeight = GetEcoSystemWeight(size)
-        canEvolve = GetCanEvolve(isEvolutionMax)
+        canEvolve = "false" if isEvolutionMax else "true"
         ShadowVolume1 = shadowVolumeMult_1*drawSize
         ShadowVolume2 = shadowVolumeMult_2*drawSize
         ShadowVolume3 = shadowVolumeMult_3*drawSize  
         shouldGlow, colors = GetGlowBothTypes(type1, type2)
-          
         
         """We write everything for 1 Pokemon in the def file"""
     
-        f.write('  <ThingDef ParentName="AnimalThingBase">\n')
-        f.write("    <defName>PW_%s</defName>\n"% (pokemonDefName))  
-        f.write("    <label>%s</label>\n"% (pokemonFullName))   
-        f.write("    <description>%s</description>\n"% (descriptionFull)) 
+        ThingDef = SubElement(root, "ThingDef", {"ParentName": "AnimalThingBase"})
+        SubElement(ThingDef, "defName").text = "PW_" + pokemonDefName
+        SubElement(ThingDef, "label").text = pokemonFullName
+        SubElement(ThingDef, "description").text = descriptionFull
         
-        f.write("    <comps>\n")
-        f.write('      <li Class="PokeWorld.CompProperties_Pokemon">\n')
-        f.write("        <pokedexNumber>%d</pokedexNumber>\n"% (pokedexNumber))
-        f.write("        <generation>%d</generation>\n"% (generation))
+        comps = SubElement(ThingDef, "comps")
+        li    = SubElement(comps, "li", {"Class":"PokeWorld.CompProperties_Pokemon"})
+        SubElement(li, "pokedexNumber").text = str(pokedexNumber)
+        SubElement(li, "generation").text = str(generation)
+
+        types  = SubElement(li, "types")
+        SubElement(types, "li").text = type1
         
-        f.write("        <types>\n")
-        f.write("          <li>%s</li>\n"% (type1))
-        if(type2 != ""):
-            f.write("          <li>%s</li>\n"% (type2))
-        f.write("        </types>\n")   
+        if type2:
+            SubElement(types, "li").text = type2 
             
-        f.write("        <starter>%s</starter>\n"% (starter))
-        f.write("        <rarity>%d</rarity>\n"% (rarity))
-        f.write("        <canEvolve>%s</canEvolve>\n"% (canEvolve))
-        f.write("        <evolutionLine>%d</evolutionLine>\n"% (evolutionLine))
+        SubElement(li, "starter").text = starter
+        SubElement(li, "rarity").text = str(rarity)
+        SubElement(li, "canEvolve").text = canEvolve
+        SubElement(li, "evolutionLine").text = str(evolutionLine)
+
         """Adding all available evolutions"""
-        if (canEvolve == "true"):
-            f.write("        <evolutions>\n")
-            evolutionCounter=0
-            for pokIndice in evolvingFrom:
-                if pokIndice == pokemonDefName:
-                    f.write("          <li>\n")
-                    f.write("            <pawnKind>PW_%s</pawnKind>\n"% (evolvingTo[evolvingFrom.index(pokIndice)+evolutionCounter]))
-                    f.write("            <requirement>%s</requirement>\n"% (evolRequirement[evolvingFrom.index(pokIndice)+evolutionCounter]))
-                    if evolRequirement[evolvingFrom.index(pokIndice)+evolutionCounter] == "level":
-                        if evolvingTo[evolvingFrom.index(pokIndice)+evolutionCounter] == "Hitmonlee":
-                            f.write("            <otherRequirement>%s</otherRequirement>\n"% ("attack"))
-                        elif evolvingTo[evolvingFrom.index(pokIndice)+evolutionCounter] == "Hitmonchan":
-                            f.write("            <otherRequirement>%s</otherRequirement>\n"% ("defense"))
-                        elif evolvingTo[evolvingFrom.index(pokIndice)+evolutionCounter] == "Hitmontop":
-                            f.write("            <otherRequirement>%s</otherRequirement>\n"% ("balanced"))
-                        else:    
-                            f.write("            <otherRequirement>%s</otherRequirement>\n"% ("none"))
-                        f.write("            <level>%d</level>\n"% (evolLevelMin[evolvingFrom.index(pokIndice)+evolutionCounter]))
-                        f.write("            <friendship>%d</friendship>\n"% (evolFriendshipMin[evolvingFrom.index(pokIndice)+evolutionCounter]))
-                        f.write("            <timeOfDay>%s</timeOfDay>\n"% (evolRequiredTime[evolvingFrom.index(pokIndice)+evolutionCounter]))
-                        f.write("            <gender>%s</gender>\n"% (evolRequiredGender[evolvingFrom.index(pokIndice)+evolutionCounter]))
-                    else  :
-                        f.write("            <item>PW_%s</item>\n"% (evolRequiredItem[evolvingFrom.index(pokIndice)+evolutionCounter]))
-                    f.write("          </li>\n")
-                    evolutionCounter+=1
-            f.write("        </evolutions>\n")
+        currentPokemonEvos = [evo for evo in evolutions if evo[1] == pokemonDefName]
+        #print(pokemonDefName, evolutions[0][1])
+
+        if currentPokemonEvos:
+            evolutions_EL = SubElement(li, "evolutions")
+            for evolution in currentPokemonEvos:
+                evoTo, evoFrom, evoReq, evoLevelMin, evoFriendship, evoTime, evoGender, evoItem = evolution
+
+                sub1Li = SubElement(evolutions_EL, "li")
+                SubElement(sub1Li, "pawnKind").text = "PW_" + evoTo
+                SubElement(sub1Li, "requirement").text = evoReq
+                if evoReq == "level":
+                    SubElement(sub1Li, "otherRequirement").text = otherEvoRequirements[evoTo]
+                    SubElement(sub1Li, "level").text = str(evoLevelMin)
+                    SubElement(sub1Li, "friendship").text = str(evoFriendship)
+                    SubElement(sub1Li, "timeOfDay").text = evoTime
+                    SubElement(sub1Li, "gender").text = evoGender
+                else:
+                    SubElement(sub1Li, "item").text = "PW_" + evoItem
             
         #Moves will go here
-        f.write("        <moves>\n")
-        f.write("          <li>\n")
-        f.write("            <moveDef>Struggle</moveDef>\n")
-        f.write("            <unlockLevel>1</unlockLevel>\n")
-        f.write("          </li>\n")
+        moves = SubElement(li, "moves")
+        sub2Li = SubElement(moves, "li")
+        SubElement(sub2Li, "moveDef").text = "Struggle"
+        SubElement(sub2Li, "unlockLevel").text = "1"
         alreadyAddedMoves = []
 
-        for index in range(0, len(movesPokemonId)):
-            if(movesPokemonId[index] == pokedexNumber):
+        for index, moveID in enumerate(movesPokemonId):
+            if(moveID == pokedexNumber):
                 moveName = movesName[index]
+                
                 if(alreadyAddedMoves.count(moveName) > 0):
                     continue
                 alreadyAddedMoves.append(moveName)
+                
                 if(moveName == "Explosion"):
                     continue
-                moveUnlockLevel = movesUnlockLevel[index]
-                f.write("          <li>\n")
-                f.write("            <moveDef>%s</moveDef>\n" %(moveName))
-                f.write("            <unlockLevel>%d</unlockLevel>\n" %(moveUnlockLevel))
-                f.write("          </li>\n")
-        f.write("        </moves>\n")       
+                
+                sub3Li = SubElement(moves, "li")
+                SubElement(sub3Li, "moveDef").text = moveName
+                SubElement(sub3Li, "unlockLevel").text = str(movesUnlockLevel[index]) 
     
         if (isBaby or isLegendary or isFossil or isParticular):
-            f.write("        <attributes>\n")
+            attributes = SubElement(li, "attributes")
             if (isBaby):
-                f.write("          <li>Baby</li>\n")
+                SubElement(attributes, "li").text = "Baby"
             if (isLegendary):
-                f.write("          <li>Legendary</li>\n")
+                SubElement(attributes, "li").text = "Legendary"
             if (isFossil):
-                f.write("          <li>Fossil</li>\n")
+                SubElement(attributes, "li").text = "Fossil"
             if (isParticular):
-                f.write("          <li>Particular</li>\n")
-            f.write("        </attributes>\n")    
-        f.write("        <baseFriendship>%d</baseFriendship>\n"% (baseFriendship))
+                SubElement(attributes, "li").text = "Particular"
+
+        SubElement(li, "baseFriendship").text = str(baseFriendship)
+        
         if(femaleRatio != -1):
-            f.write("        <femaleRatio>%g</femaleRatio>\n"% (femaleRatio))
-        f.write("        <expCategory>%s</expCategory>\n"% (expCategory))
-        f.write("        <wildLevelMin>%d</wildLevelMin>\n"% (wildLevelMin))
-        f.write("        <wildLevelMax>%d</wildLevelMax>\n"% (wildLevelMax))
+            SubElement(li, "femaleRatio").text = f"{femaleRatio:g}"
+        SubElement(li, "expCategory").text = expCategory
+        SubElement(li, "wildLevelMin").text = str(wildLevelMin)
+        SubElement(li, "wildLevelMax").text = str(wildLevelMax)
         
-        f.write("        <eggGroups>\n")
-        f.write("          <li>%s</li>\n"% eggGroup1)
-        if(eggGroup2 != ""):
-            f.write("          <li>%s</li>\n"% eggGroup2)
-        f.write("        </eggGroups>\n")    
+        eggGroups = SubElement(li, "eggGroups")
+        SubElement(eggGroups, "li").text = eggGroup1
+        if eggGroup2:
+            SubElement(eggGroups, "li").text = eggGroup2
         
-        f.write("        <baseHP>%d</baseHP>\n"% (statHealth))
-        f.write("        <baseAttack>%d</baseAttack>\n"% (statAtk))
-        f.write("        <baseDefense>%d</baseDefense>\n"% (statDef))
-        f.write("        <baseSpAttack>%d</baseSpAttack>\n"% (statAtkSpe))
-        f.write("        <baseSpDefense>%d</baseSpDefense>\n"% (statDefSpe))
-        f.write("        <baseSpeed>%d</baseSpeed>\n"% (statSpeed)) 
+        SubElement(li, "baseHP").text        = str(statHealth)
+        SubElement(li, "baseAttack").text    = str(statAtk)
+        SubElement(li, "baseDefense").text   = str(statDef)
+        SubElement(li, "baseSpAttack").text  = str(statAtkSpe)
+        SubElement(li, "baseSpDefense").text = str(statDefSpe)
+        SubElement(li, "baseSpeed").text     = str(statSpeed)
+
+        EVYields = SubElement(li, "EVYields")
         
-        f.write("        <EVYields>\n") 
         if(hpEV > 0):
-            f.write("          <PW_HP>%d</PW_HP>\n"% (hpEV))
+            SubElement(EVYields, "PW_HP").text = str(hpEV)
         if(attackEV > 0):
-            f.write("          <PW_Attack>%d</PW_Attack>\n"% (attackEV))
+            SubElement(EVYields, "PW_Attack").text = str(attackEV)
         if(defenseEV > 0):
-            f.write("          <PW_Defense>%d</PW_Defense>\n"% (defenseEV))
+            SubElement(EVYields, "PW_Defense").text = str(defenseEV)
         if(spAttackEV > 0):
-            f.write("          <PW_SpecialAttack>%d</PW_SpecialAttack>\n"% (spAttackEV))
+            SubElement(EVYields, "PW_SpecialAttack").text = str(spAttackEV)
         if(spDefenseEV > 0):
-            f.write("          <PW_SpecialDefense>%d</PW_SpecialDefense>\n"% (spDefenseEV))
+            SubElement(EVYields, "PW_SpecialDefense").text = str(spDefenseEV)
         if(speedEV > 0):
-            f.write("          <PW_Speed>%d</PW_Speed>\n"% (speedEV))
-        f.write("        </EVYields>\n")
-        f.write("        <catchRate>%d</catchRate>\n" % (catchRate))
-        f.write("        <shinyChance>%g</shinyChance>\n"% (shinyChance)) 
+            SubElement(EVYields, "PW_Speed").text = str(speedEV)
         
-        if pokemonDefName == "Pichu":
-            f.write("        <formChangerCondition>Fixed</formChangerCondition>\n")
-            f.write("        <showFormLabel>false</showFormLabel>\n")
-            f.write("        <forms>\n")       
-            f.write("          <li>\n")
-            f.write("            <label>%s</label>\n"% ("Normal"))
-            f.write("            <texPathKey>%s</texPathKey>\n"% ("Normal"))
-            f.write("          </li>\n") 
-            f.write("          <li>\n")
-            f.write("            <label>%s</label>\n"% ("Spiky"))
-            f.write("            <texPathKey>%s</texPathKey>\n"% ("Spiky"))
-            f.write("            <weight>0.01</weight>\n")
-            f.write("          </li>\n") 
-            f.write("        </forms>\n")
+        SubElement(li, "catchRate").text = str(catchRate)
+        SubElement(li, "shinyChance").text = str(shinyChance)
         
-        if pokemonDefName == "Unown":
-            f.write("        <formChangerCondition>Fixed</formChangerCondition>\n")
-            f.write("        <showFormLabel>true</showFormLabel>\n")
-            f.write("        <forms>\n")
-            
-            for letter in list(string.ascii_uppercase):
-                f.write("          <li>\n")
-                f.write(f"            <label>{letter}</label>\n")
-                f.write(f"            <texPathKey>{letter}</texPathKey>\n")
-                f.write("          </li>\n")  
-            f.write("          <li>\n")
-            f.write("            <label>%s</label>\n"% ("!"))
-            f.write("            <texPathKey>%s</texPathKey>\n"% ("Exclamation"))
-            f.write("            <weight>0.2</weight>\n")
-            f.write("          </li>\n")        
-            f.write("          <li>\n")
-            f.write("            <label>%s</label>\n"% ("?"))
-            f.write("            <texPathKey>%s</texPathKey>\n"% ("Question"))
-            f.write("            <weight>0.2</weight>\n")
-            f.write("          </li>\n") 
-            f.write("        </forms>\n")
-        
-        if pokemonDefName == "Castform":
-            f.write("        <formChangerCondition>Environnement</formChangerCondition>\n")
-            f.write("        <showFormLabel>false</showFormLabel>\n")
-            f.write("        <forms>\n")
-            f.write("          <li>\n") 
-            f.write("            <label>%s</label>\n"% ("Normal"))
-            f.write("            <texPathKey>%s</texPathKey>\n"% ("Normal"))
-            f.write("            <isDefault>true</isDefault>\n")
-            f.write("          </li>\n") 
-            f.write("          <li>\n")  
-            f.write("            <timeOfDay>Day</timeOfDay>\n")
-            f.write("            <includeWeathers>\n")
-            f.write("              <li>Clear</li>\n")
-            f.write("            </includeWeathers>\n")
-            f.write("            <label>%s</label>\n"% ("Sunny"))
-            f.write("            <texPathKey>%s</texPathKey>\n"% ("Sunny"))
-            f.write("            <type1>Fire</type1>\n")
-            f.write("          </li>\n") 
-            f.write("          <li>\n") 
-            f.write("            <includeWeathers>\n")
-            f.write("              <li>Rain</li>\n")
-            f.write("              <li>RainyThunderstorm</li>\n")
-            f.write("              <li>FoggyRain</li>\n")
-            f.write("            </includeWeathers>\n")
-            f.write("            <label>%s</label>\n"% ("Rainy"))
-            f.write("            <texPathKey>%s</texPathKey>\n"% ("Rainy"))
-            f.write("            <type1>Water</type1>\n")
-            f.write("          </li>\n") 
-            f.write("          <li>\n") 
-            f.write("            <includeWeathers>\n")
-            f.write("              <li>SnowHard</li>\n")
-            f.write("              <li>SnowGentle</li>\n")
-            f.write("            </includeWeathers>\n")
-            f.write("            <label>%s</label>\n"% ("Snowy"))
-            f.write("            <texPathKey>%s</texPathKey>\n"% ("Snowy"))
-            f.write("            <type1>Ice</type1>\n")
-            f.write("          </li>\n")       
-            f.write("        </forms>\n")
-        
-        if pokemonDefName == "Deoxys":
-            f.write("        <formChangerCondition>Selectable</formChangerCondition>\n")
-            f.write("        <forms>\n")
-            f.write("          <li>\n")  
-            f.write("            <label>%s</label>\n"% ("Normal"))
-            f.write("            <texPathKey>%s</texPathKey>\n"% ("Normal"))
-            f.write("            <isDefault>true</isDefault>\n")
-            f.write("          </li>\n") 
-            f.write("          <li>\n") 
-            f.write("            <label>%s</label>\n"% ("Attack"))
-            f.write("            <texPathKey>%s</texPathKey>\n"% ("Attack"))
-            f.write("          </li>\n") 
-            f.write("          <li>\n") 
-            f.write("            <label>%s</label>\n"% ("Defense"))
-            f.write("            <texPathKey>%s</texPathKey>\n"% ("Defense"))
-            f.write("          </li>\n") 
-            f.write("          <li>\n") 
-            f.write("            <label>%s</label>\n"% ("Speed"))
-            f.write("            <texPathKey>%s</texPathKey>\n"% ("Speed"))
-            f.write("          </li>\n") 
-            f.write("        </forms>\n")
-        
-        if pokemonDefName == "Burmy":
-            f.write("        <formChangerCondition>Environnement</formChangerCondition>\n")
-            f.write("        <forms>\n")
-            f.write("          <li>\n")  
-            f.write("            <label>%s</label>\n"% ("Plant"))
-            f.write("            <texPathKey>%s</texPathKey>\n"% ("Plant"))
-            f.write("            <isDefault>true</isDefault>\n")
-            f.write("          </li>\n") 
-            f.write("          <li>\n") 
-            f.write("            <label>%s</label>\n"% ("Sandy"))
-            f.write("            <texPathKey>%s</texPathKey>\n"% ("Sandy"))
-            f.write("            <includeBiomes>\n")
-            f.write("              <li>AridShrubland</li>\n")
-            f.write("              <li>Desert</li>\n")
-            f.write("              <li>ExtremeDesert</li>\n")
-            f.write("            </includeBiomes>\n")
-            f.write("          </li>\n") 
-            f.write("          <li>\n") 
-            f.write("            <label>%s</label>\n"% ("Trash"))
-            f.write("            <texPathKey>%s</texPathKey>\n"% ("Trash"))
-            f.write("            <includeBiomes>\n")
-            f.write("              <li>Tundra</li>\n")
-            f.write("              <li>IceSheet</li>\n")
-            f.write("              <li>SeaIce</li>\n")
-            f.write("            </includeBiomes>\n")
-            f.write("          </li>\n") 
-            f.write("        </forms>\n")
-            
-        if pokemonDefName == "Wormadam":
-            f.write("        <formChangerCondition>Fixed</formChangerCondition>\n")
-            f.write("        <forms>\n")
-            f.write("          <li>\n")
-            f.write("            <label>%s</label>\n"% ("Plant"))
-            f.write("            <texPathKey>%s</texPathKey>\n"% ("Plant"))
-            f.write("          </li>\n")
-            f.write("          <li>\n")      
-            f.write("            <label>%s</label>\n"% ("Sandy"))
-            f.write("            <texPathKey>%s</texPathKey>\n"% ("Sandy"))
-            f.write("          </li>\n")
-            f.write("          <li>\n")
-            f.write("            <label>%s</label>\n"% ("Trash"))
-            f.write("            <texPathKey>%s</texPathKey>\n"% ("Trash"))
-            f.write("          </li>\n")
-            f.write("        </forms>\n")
-    
-        if pokemonDefName == "Cherrim":
-            f.write("        <formChangerCondition>Environnement</formChangerCondition>\n")
-            f.write("        <forms>\n")
-            f.write("          <li>\n") 
-            f.write("            <label>%s</label>\n"% ("Overcast"))
-            f.write("            <texPathKey>%s</texPathKey>\n"% ("Overcast"))
-            f.write("            <isDefault>true</isDefault>\n")
-            f.write("          </li>\n") 
-            f.write("          <li>\n")  
-            f.write("            <timeOfDay>Day</timeOfDay>\n")
-            f.write("            <includeWeathers>\n")
-            f.write("              <li>Clear</li>\n")
-            f.write("            </includeWeathers>\n")
-            f.write("            <label>%s</label>\n"% ("Sunshine"))
-            f.write("            <texPathKey>%s</texPathKey>\n"% ("Sunshine"))
-            f.write("          </li>\n")
-            f.write("        </forms>\n")
-        
-        if pokemonDefName == "Shellos":
-            f.write("        <formChangerCondition>Fixed</formChangerCondition>\n")
-            f.write("        <forms>\n")
-            f.write("          <li>\n")
-            f.write("            <label>%s</label>\n"% ("East"))
-            f.write("            <texPathKey>%s</texPathKey>\n"% ("East"))
-            f.write("          </li>\n")
-            f.write("          <li>\n")
-            f.write("            <label>%s</label>\n"% ("West"))
-            f.write("            <texPathKey>%s</texPathKey>\n"% ("West"))
-            f.write("          </li>\n")
-            f.write("        </forms>\n")
-            
-        if pokemonDefName == "Gastrodon":
-            f.write("        <formChangerCondition>Fixed</formChangerCondition>\n")
-            f.write("        <forms>\n")
-            f.write("          <li>\n")
-            f.write("            <label>%s</label>\n"% ("East"))
-            f.write("            <texPathKey>%s</texPathKey>\n"% ("East"))
-            f.write("          </li>\n")
-            f.write("          <li>\n")
-            f.write("            <label>%s</label>\n"% ("West"))
-            f.write("            <texPathKey>%s</texPathKey>\n"% ("West"))
-            f.write("          </li>\n")
-            f.write("        </forms>\n")
-            
-        if pokemonDefName == "Rotom":
-            f.write("        <formChangerCondition>Selectable</formChangerCondition>\n")
-            f.write("        <forms>\n")
-            f.write("          <li>\n")  
-            f.write("            <label>%s</label>\n"% ("Normal"))
-            f.write("            <texPathKey>%s</texPathKey>\n"% ("Normal"))
-            f.write("            <isDefault>true</isDefault>\n")
-            f.write("          </li>\n") 
-            f.write("          <li>\n") 
-            f.write("            <label>%s</label>\n"% ("Heat"))
-            f.write("            <texPathKey>%s</texPathKey>\n"% ("Heat"))
-            f.write("          </li>\n") 
-            f.write("          <li>\n") 
-            f.write("            <label>%s</label>\n"% ("Wash"))
-            f.write("            <texPathKey>%s</texPathKey>\n"% ("Wash"))
-            f.write("          </li>\n") 
-            f.write("          <li>\n") 
-            f.write("            <label>%s</label>\n"% ("Frost"))
-            f.write("            <texPathKey>%s</texPathKey>\n"% ("Frost"))
-            f.write("          </li>\n") 
-            f.write("          <li>\n") 
-            f.write("            <label>%s</label>\n"% ("Fan"))
-            f.write("            <texPathKey>%s</texPathKey>\n"% ("Fan"))
-            f.write("          </li>\n") 
-            f.write("          <li>\n") 
-            f.write("            <label>%s</label>\n"% ("Mow"))
-            f.write("            <texPathKey>%s</texPathKey>\n"% ("Mow"))
-            f.write("          </li>\n") 
-            f.write("        </forms>\n")
-            
-        if pokemonDefName == "Giratina":
-            f.write("        <formChangerCondition>Selectable</formChangerCondition>\n")
-            f.write("        <forms>\n")
-            f.write("          <li>\n")  
-            f.write("            <label>%s</label>\n"% ("Altered"))
-            f.write("            <texPathKey>%s</texPathKey>\n"% ("Altered"))
-            f.write("            <isDefault>true</isDefault>\n")
-            f.write("          </li>\n") 
-            f.write("          <li>\n") 
-            f.write("            <label>%s</label>\n"% ("Origin"))
-            f.write("            <texPathKey>%s</texPathKey>\n"% ("Origin"))
-            f.write("          </li>\n") 
-            f.write("        </forms>\n")
-            
-        if pokemonDefName == "Shaymin":
-            f.write("        <formChangerCondition>Selectable</formChangerCondition>\n")
-            f.write("        <forms>\n")
-            f.write("          <li>\n")  
-            f.write("            <label>%s</label>\n"% ("Land"))
-            f.write("            <texPathKey>%s</texPathKey>\n"% ("Land"))
-            f.write("            <isDefault>true</isDefault>\n")
-            f.write("          </li>\n") 
-            f.write("          <li>\n") 
-            f.write("            <label>%s</label>\n"% ("Sky"))
-            f.write("            <texPathKey>%s</texPathKey>\n"% ("Sky"))
-            f.write("          </li>\n") 
-            f.write("        </forms>\n")
-            
-        if pokemonDefName == "Arceus":
-            f.write("        <formChangerCondition>Selectable</formChangerCondition>\n")
-            f.write("        <forms>\n")
-            f.write("          <li>\n")  
-            f.write("            <label>%s</label>\n"% ("Normal"))
-            f.write("            <texPathKey>%s</texPathKey>\n"% ("Normal"))
-            f.write("            <isDefault>true</isDefault>\n")
-            f.write("          </li>\n") 
-            f.write("          <li>\n") 
-            f.write("            <label>%s</label>\n"% ("Fire"))
-            f.write("            <texPathKey>%s</texPathKey>\n"% ("Fire"))
-            f.write("          </li>\n") 
-            f.write("          <li>\n") 
-            f.write("            <label>%s</label>\n"% ("Water"))
-            f.write("            <texPathKey>%s</texPathKey>\n"% ("Water"))
-            f.write("          </li>\n") 
-            f.write("          <li>\n") 
-            f.write("            <label>%s</label>\n"% ("Electric"))
-            f.write("            <texPathKey>%s</texPathKey>\n"% ("Electric"))
-            f.write("          </li>\n") 
-            f.write("          <li>\n")  
-            f.write("            <label>%s</label>\n"% ("Grass"))
-            f.write("            <texPathKey>%s</texPathKey>\n"% ("Grass"))
-            f.write("          </li>\n") 
-            f.write("          <li>\n") 
-            f.write("            <label>%s</label>\n"% ("Ice"))
-            f.write("            <texPathKey>%s</texPathKey>\n"% ("Ice"))
-            f.write("          </li>\n") 
-            f.write("          <li>\n") 
-            f.write("            <label>%s</label>\n"% ("Fighting"))
-            f.write("            <texPathKey>%s</texPathKey>\n"% ("Fighting"))
-            f.write("          </li>\n") 
-            f.write("          <li>\n") 
-            f.write("            <label>%s</label>\n"% ("Poison"))
-            f.write("            <texPathKey>%s</texPathKey>\n"% ("Poison"))
-            f.write("          </li>\n") 
-            f.write("          <li>\n")  
-            f.write("            <label>%s</label>\n"% ("Ground"))
-            f.write("            <texPathKey>%s</texPathKey>\n"% ("Ground"))
-            f.write("          </li>\n") 
-            f.write("          <li>\n") 
-            f.write("            <label>%s</label>\n"% ("Flying"))
-            f.write("            <texPathKey>%s</texPathKey>\n"% ("Flying"))
-            f.write("          </li>\n") 
-            f.write("          <li>\n") 
-            f.write("            <label>%s</label>\n"% ("Psychic"))
-            f.write("            <texPathKey>%s</texPathKey>\n"% ("Psychic"))
-            f.write("          </li>\n") 
-            f.write("          <li>\n") 
-            f.write("            <label>%s</label>\n"% ("Bug"))
-            f.write("            <texPathKey>%s</texPathKey>\n"% ("Bug"))
-            f.write("          </li>\n") 
-            f.write("          <li>\n")  
-            f.write("            <label>%s</label>\n"% ("Rock"))
-            f.write("            <texPathKey>%s</texPathKey>\n"% ("Rock"))
-            f.write("          </li>\n") 
-            f.write("          <li>\n") 
-            f.write("            <label>%s</label>\n"% ("Ghost"))
-            f.write("            <texPathKey>%s</texPathKey>\n"% ("Ghost"))
-            f.write("          </li>\n") 
-            f.write("          <li>\n") 
-            f.write("            <label>%s</label>\n"% ("Dragon"))
-            f.write("            <texPathKey>%s</texPathKey>\n"% ("Dragon"))
-            f.write("          </li>\n") 
-            f.write("          <li>\n") 
-            f.write("            <label>%s</label>\n"% ("Dark"))
-            f.write("            <texPathKey>%s</texPathKey>\n"% ("Dark"))
-            f.write("          </li>\n") 
-            f.write("          <li>\n") 
-            f.write("            <label>%s</label>\n"% ("Steel"))
-            f.write("            <texPathKey>%s</texPathKey>\n"% ("Steel"))
-            f.write("          </li>\n") 
-            f.write("          <li>\n") 
-            f.write("            <label>%s</label>\n"% ("Fairy"))
-            f.write("            <texPathKey>%s</texPathKey>\n"% ("Fairy"))
-            f.write("          </li>\n") 
-            f.write("        </forms>\n")
-        
-        f.write("      </li>\n")
-        
+        if pokemonDefName in hasForm:
+            currData = formsData[pokemonDefName]
+            SubElement(li, "formChangerCondition").text = currData["formChangerCondition"]
+            if "showFormLabel" in currData.keys():
+                SubElement(li, "showFormLabel").text = currData["showFormLabel"]
+
+            formElement = SubElement(li, "forms")
+            for form in currData["forms"]:
+                sub4Li = SubElement(formElement, "li")
+
+                for key, value in form.items():
+                    if isinstance(value, list): #if the value is a list of stuff like biomes
+                        below = SubElement(sub4Li, key) #we need to add two lower tags
+                        for criteria in value:
+                            SubElement(below, "li").text = criteria
+                    else:
+                        SubElement(sub4Li, key).text = value
+
+                if "texPathKey" not in form.keys():
+                    SubElement(sub4Li, "texPathKey").text = form["label"]
+
         if eggGroup1 != "Undiscovered":
             if pokemonDefName != "Ditto":
-                f.write('      <li Class="CompProperties_EggLayer">\n')
-                if pokemonDefName == "Manaphy":                
-                    f.write("        <eggFertilizedDef>PW_EggPhione</eggFertilizedDef>\n")
-                else :
+                li = SubElement(comps, "li", {"Class":"CompProperties_EggLayer"})
+                
+                if pokemonDefName == "Manaphy":  
+                    SubElement(li, "eggFertilizedDef").text = "PW_EggPhione"
+                
+                else:
                     for indexOeuf, DexName in enumerate(defNameList):
-                        ######################
                         if pokemonEvolutionLine[indexOeuf] == evolutionLine and pokemonEvolutionTier[indexOeuf] == 1:
-                            f.write("        <eggFertilizedDef>PW_Egg%s</eggFertilizedDef>\n"% (DexName))
+                            SubElement(li, "eggFertilizedDef").text = "PW_Egg" + DexName
                             break
-                f.write("        <eggFertilizationCountMax>1</eggFertilizationCountMax>\n")
-                f.write("        <eggLayIntervalDays>%d</eggLayIntervalDays>\n"% (eggLayDays))
-                f.write("        <eggProgressUnfertilizedMax>0</eggProgressUnfertilizedMax>\n")
-                f.write("        <eggCountRange>1</eggCountRange>\n")
+                SubElement(li, "eggFertilizationCountMax").text = "1"
+                SubElement(li, "eggLayIntervalDays").text = str(int(eggLayDays))
+                SubElement(li, "eggProgressUnfertilizedMax").text = "0"
+                SubElement(li, "eggCountRange").text = "1"
+    
                 if genderLess == 1:
-                    f.write("        <eggLayFemaleOnly>false</eggLayFemaleOnly>\n")
-                f.write("      </li>\n")   
-            else :
-                f.write('      <li Class="PokeWorld.CompProperties_DittoEggLayer">\n')
-                f.write("        <eggFertilizationCountMax>1</eggFertilizationCountMax>\n")
-                f.write("        <eggLayIntervalDays>%d</eggLayIntervalDays>\n"% (eggLayDays))
-                f.write("        <eggProgressUnfertilizedMax>0</eggProgressUnfertilizedMax>\n")
-                f.write("        <eggCountRange>1</eggCountRange>\n")
-                f.write("      </li>\n") 
+                    SubElement(li, "eggLayFemaleOnly").text = "false"
+
+            else:
+                li = SubElement(comps, "li", {"Class":"PokeWorld.CompProperties_DittoEggLayer"})
+                SubElement(li, "eggFertilizationCountMax").text = "1"
+                SubElement(li, "eggLayIntervalDays").text = str(int(eggLayDays))
+                SubElement(li, "eggProgressUnfertilizedMax").text = "0"
+                SubElement(li, "eggCountRange").text = "1"
                 
         if((type1 == "Fire" or type2 == "Fire") and not(type1 == "Ice" or type2 == "Ice")):
-            f.write('      <li Class="CompProperties_HeatPusher">\n') 
-            f.write("        <compClass>PokeWorld.CompPokemonHeatPusher</compClass>\n")
-            f.write("        <heatPerSecond>%.2f</heatPerSecond>\n"%(totalStat / 220))
-            f.write("        <heatPushMaxTemperature>32</heatPushMaxTemperature>\n")
-            f.write("      </li>\n") 
+            li = SubElement(comps, "li", {"Class":"CompProperties_HeatPusher"})
+            
+            SubElement(li, "compClass").text = "PokeWorld.CompPokemonHeatPusher"
+            SubElement(li, "heatPerSecond").text = f"{totalStat / 220:.2f}"
+            SubElement(li, "heatPushMaxTemperature").text = "32"
             
         if((type1 == "Ice" or type2 == "Ice") and not(type1 == "Fire" or type2 == "Fire")):
-            f.write('      <li Class="CompProperties_HeatPusher">\n') 
-            f.write("        <compClass>PokeWorld.CompPokemonHeatPusher</compClass>\n")
-            f.write("        <heatPerSecond>%.2f</heatPerSecond>\n"%(-totalStat / 220))
-            f.write("        <heatPushMinTemperature>-8</heatPushMinTemperature>\n")
-            f.write("      </li>\n")
+            li = SubElement(comps, "li", {"Class":"CompProperties_HeatPusher"})
+            
+            SubElement(li, "compClass").text = "PokeWorld.CompPokemonHeatPusher"
+            SubElement(li, "heatPerSecond").text = f"{-totalStat / 220:.2f}"
+            SubElement(li, "heatPushMinTemperature").text = "-8"
 
         if(type1 == "Electric" or type2 == "Electric"):
-            f.write('      <li Class="CompProperties_Power">\n') 
-            f.write("        <compClass>PokeWorld.CompPokemonPower</compClass>\n")
-            f.write("        <basePowerConsumption>%.2f</basePowerConsumption>\n"%(-totalStat / 8))
-            f.write("      </li>\n")
+            li = SubElement(comps, "li", {"Class":"CompProperties_Power"})
+            
+            SubElement(li, "compClass").text = "PokeWorld.CompPokemonPower"
+            SubElement(li, "basePowerConsumption").text = f"{-totalStat / 8:.2f}"
 
         """
         if(shouldGlow):
-            f.write('      <li Class="CompProperties_Glower">\n') 
+            f.write("      <li Class=\"CompProperties_Glower\">\n") 
             f.write("        <glowRadius>%d</glowRadius>\n"% (math.ceil(totalStat / 200)))
             f.write("        <glowColor>(%d,%d,%d,0)</glowColor>\n"% (colors[0], colors[1], colors[2]))
             f.write("      </li>\n")
         """
-        f.write("    </comps>\n")
     
-    
-        f.write("    <statBases>\n")
-        f.write("      <MoveSpeed>%0.1f</MoveSpeed>\n"% (rimworldSpeed))
-        f.write("      <MarketValue>%d</MarketValue>\n"% (marketValue))
-        f.write("      <ComfyTemperatureMin>%d</ComfyTemperatureMin>\n"% (ComfyTemperatureMin))
-        f.write("      <ComfyTemperatureMax>%d</ComfyTemperatureMax>\n"% (ComfyTemperatureMax))
-        f.write("      <LeatherAmount>%d</LeatherAmount>\n"%(leatherAmount))
-        f.write("      <PW_BaseXPYield>%d</PW_BaseXPYield>\n"% (expYield * expYieldMultiplier))
-        f.write("      <ToxicSensitivity>%g</ToxicSensitivity>\n"% (toxicSensitivity))
-        f.write("    </statBases>\n")
-        f.write("    <inspectorTabs>\n")
-        f.write("      <li>PokeWorld.ITab_Pawn_Moves</li>\n")
-        f.write("    </inspectorTabs>\n")
+        statBases = SubElement(ThingDef, "statBases")
+        SubElement(statBases, "MoveSpeed").text = f"{rimworldSpeed:.1f}"
+        SubElement(statBases, "MarketValue").text = str(marketValue)
+        SubElement(statBases, "ComfyTemperatureMin").text = str(ComfyTemperatureMin)
+        SubElement(statBases, "ComfyTemperatureMax").text = str(ComfyTemperatureMax)
+        SubElement(statBases, "LeatherAmount").text = str(leatherAmount)
+        SubElement(statBases, "PW_BaseXPYield").text = str(expYield * expYieldMultiplier)
+        SubElement(statBases, "ToxicSensitivity").text = f"{toxicSensitivity:g}"
+        
+        inspectorTabs = SubElement(ThingDef, "inspectorTabs")
+        SubElement(inspectorTabs, "li").text = "PokeWorld.ITab_Pawn_Moves"
         
         if(type1 == "Steel" or type2 == "Steel"):
-            f.write("    <soundDrop>ChunkSlag_Drop</soundDrop>\n")
+            SubElement(ThingDef, "soundDrop").text = "ChunkSlag_Drop"
         elif(type1 == "Rock" or type2 == "Rock"):
-            f.write("    <soundDrop>ChunkRock_Drop</soundDrop>\n")
+            SubElement(ThingDef, "soundDrop").text = "ChunkRock_Drop"
 
+        race = SubElement(ThingDef, "race")
     
-        f.write("    <race>\n")
-        f.write("      <body>%s</body>\n"% (body))
+        SubElement(race, "body").text = body
+
         if genderLess == 1:
-            f.write("      <hasGenders>false</hasGenders>\n")
+            SubElement(race, "hasGenders").text = "false"
                 
         if (isBaby or isLegendary or isFossil or isParticular):
-            f.write("      <herdMigrationAllowed>false</herdMigrationAllowed>\n")
-        f.write("      <petness>%.1f</petness>\n"% (petness))
-        f.write("      <packAnimal>%s</packAnimal>\n"% (packAnimal))
-        f.write("      <herdAnimal>%s</herdAnimal>\n"% (herdAnimal))
-        f.write("      <baseBodySize>%.2f</baseBodySize>\n"% (baseBodySize))
-        f.write("      <baseHungerRate>0.30</baseHungerRate>\n")
-        f.write("      <baseHealthScale>%.2f</baseHealthScale>\n"% (baseHealthScale))
-        f.write("      <foodType>OmnivoreAnimal, VegetarianRoughAnimal</foodType>\n")
-        if i == 0:
-            f.write("      <meatLabel>Pokémon meat</meatLabel>\n")
-        elif i == 2:
-            f.write("      <meatLabel>Pokémon meat</meatLabel>\n")
+            SubElement(race, "herdMigrationAllowed").text = "false"
+        
+        SubElement(race, "petness").text = f"{petness:.1f}"
+        SubElement(race, "packAnimal").text = packAnimal
+        SubElement(race, "herdAnimal").text = herdAnimal
+        SubElement(race, "baseBodySize").text = f"{baseBodySize:.2f}"
+        SubElement(race, "baseHungerRate").text = "0.30"
+        SubElement(race, "baseHealthScale").text = f"{baseHealthScale:.2f}"
+        SubElement(race, "foodType").text = "OmnivoreAnimal, VegetarianRoughAnimal"
+
+        if i in [0, 2]:
+            SubElement(race, "meatLabel").text = "Pokémon meat"
         elif baseBodySize < 0.7:
-            f.write("      <useMeatFrom>PW_Bulbasaur</useMeatFrom>\n")
+            SubElement(race, "useMeatFrom").text = "PW_Bulbasaur"
         else:
-            f.write("      <useMeatFrom>PW_Venusaur</useMeatFrom>\n")
-        f.write("      <leatherDef>%s</leatherDef>\n"%(leather))
-        f.write("      <nameOnTameChance>1</nameOnTameChance>\n")
-        f.write("      <trainability>Advanced</trainability>\n")
-        f.write("      <trainableTags>\n")
-        f.write("        <li>PW_Pokemon</li>\n")
-        f.write("      </trainableTags>\n")
-        f.write("      <wildness>%.1f</wildness>\n"%(wildness))
-        f.write("      <manhunterOnDamageChance>%.2f</manhunterOnDamageChance>\n" %(manhunterOnDamageChance))
-        f.write("      <manhunterOnTameFailChance>%.2f</manhunterOnTameFailChance>\n" %(manhunterOnTameFailChance))
-        f.write("      <nuzzleMtbHours>12</nuzzleMtbHours>\n")
-        f.write("      <lifeExpectancy>%d</lifeExpectancy>\n"%(ageExpectancy))
-        f.write("      <lifeStageAges>\n")
-        f.write("        <li>\n")
-        f.write("          <def>AnimalAdult</def>\n")
-        f.write("          <minAge>0</minAge>\n")
-        f.write("          <soundWounded>Pawn_%s_Call</soundWounded>\n"% (pokemonDefName)) 
-        f.write("          <soundDeath>Pawn_%s_Call</soundDeath>\n"% (pokemonDefName))
-        f.write("          <soundCall>Pawn_%s_Call</soundCall>\n"% (pokemonDefName))
-        f.write("          <soundAngry>Pawn_%s_Call</soundAngry>\n"% (pokemonDefName))
-        f.write("        </li>\n")
-        f.write("      </lifeStageAges>\n")
-        f.write("      <soundMeleeHitPawn>Pawn_Melee_SmallScratch_HitPawn</soundMeleeHitPawn>\n")
-        f.write("      <soundMeleeHitBuilding>Pawn_Melee_SmallScratch_HitBuilding</soundMeleeHitBuilding>\n")
-        f.write("      <soundMeleeMiss>Pawn_Melee_SmallScratch_Miss</soundMeleeMiss>\n")
-        f.write("      <soundCallIntervalRange>3000~6000</soundCallIntervalRange>\n")
-        f.write("    </race>\n")
-        f.write("    <recipes>\n")   
-        f.write("      <li>PW_AdministerPotion</li>\n")
-        f.write("      <li>PW_AdministerHyperPotion</li>\n")
-        f.write("      <li>PW_AdministerMaxPotion</li>\n")
-        f.write("      <li>PW_AdministerHealPowder</li>\n")
-        f.write("      <li>PW_GiveOneRareCandy</li>\n")
-        f.write("      <li>PW_GiveFiveRareCandy</li>\n")
+            SubElement(race, "useMeatFrom").text = "PW_Venusaur"
+        
+        SubElement(race, "leatherDef").text = leather
+        SubElement(race, "nameOnTameChance").text = "1"
+        SubElement(race, "trainability").text = "Advanced"
+        trainableTags = SubElement(race, "trainableTags")
+        SubElement(trainableTags, "li").text = "PW_Pokemon"
+
+        SubElement(race, "wildness").text = f"{wildness:.1f}"
+        SubElement(race, "manhunterOnDamageChance").text   = f"{manhunterOnDamageChance:.2f}"
+        SubElement(race, "manhunterOnTameFailChance").text = f"{manhunterOnTameFailChance:.2f}"
+        SubElement(race, "nuzzleMtbHours").text = "12"
+        SubElement(race, "lifeExpectancy").text = str(ageExpectancy)
+
+        lifeStageAges = SubElement(race, "lifeStageAges")
+        sub5Li = SubElement(lifeStageAges, "li")
+
+        SubElement(sub5Li, "def").text = "AnimalAdult"
+        SubElement(sub5Li, "minAge").text = "0"
+        SubElement(sub5Li, "soundWounded").text = f"Pawn_{pokemonDefName}_Call"
+        SubElement(sub5Li, "soundDeath").text = f"Pawn_{pokemonDefName}_Call"
+        SubElement(sub5Li, "soundCall").text = f"Pawn_{pokemonDefName}_Call"
+        SubElement(sub5Li, "soundAngry").text = f"Pawn_{pokemonDefName}_Call"
+
+        SubElement(race, "soundMeleeHitPawn").text = "Pawn_Melee_SmallScratch_HitPawn"
+        SubElement(race, "soundMeleeHitBuilding").text = "Pawn_Melee_SmallScratch_HitBuilding"
+        SubElement(race, "soundMeleeMiss").text = "Pawn_Melee_SmallScratch_Miss"
+        SubElement(race, "soundCallIntervalRange").text = "3000~6000"
+
+        recipes = SubElement(ThingDef, "recipes")
+
+        SubElement(recipes, "li").text = "PW_AdministerPotion"
+        SubElement(recipes, "li").text = "PW_AdministerHyperPotion"
+        SubElement(recipes, "li").text = "PW_AdministerMaxPotion"
+        SubElement(recipes, "li").text = "PW_AdministerHealPowder"
+        SubElement(recipes, "li").text = "PW_GiveOneRareCandy"
+        SubElement(recipes, "li").text = "PW_GiveFiveRareCandy"
+        
         """Adding recipe for item based evolutions if needed"""
-        if (canEvolve == "true"):        
-            evolutionCounter2=0
-            for pokemonEvolvingFrom in evolvingFrom:
-                if pokemonEvolvingFrom == pokemonDefName:
-                    if evolRequirement[evolvingFrom.index(pokemonEvolvingFrom)+evolutionCounter2] == "item":
-                        f.write("      <li>PW_Expose%s</li>\n"% (evolRequiredItem[evolvingFrom.index(pokemonEvolvingFrom)+evolutionCounter2]))
-                    evolutionCounter2+=1
-        f.write("    </recipes>\n")
+        if currentPokemonEvos:        
+            for evolution in currentPokemonEvos:
+                evoReq  = evolution[2]
+            
+                if evoReq == "item":
+                    evoItem = evolution[7]
+                    SubElement(recipes, "li").text = "PW_Expose" + evoItem
+
+        tradeTags_EL = SubElement(ThingDef, "tradeTags")
         
-        f.write("    <tradeTags>\n")
         for tag in tradeTags:
-            f.write("      <li>%s</li>\n"% (tag))
-        f.write("    </tradeTags>\n")
-        f.write("  </ThingDef>\n")
-        
-        f.write('  <PawnKindDef ParentName="AnimalKindBase">\n')
-        f.write("    <defName>PW_%s</defName>\n"% (pokemonDefName))
-        f.write("    <label>%s</label>\n"% (pokemonFullName))
-        f.write("    <labelPlural>%s</labelPlural>\n"% (pokemonFullName))
-        f.write("    <race>PW_%s</race>\n"% (pokemonDefName))
-        f.write("    <combatPower>%.0f</combatPower>\n"% (combatPower))
+            SubElement(tradeTags_EL, "li").text = tag
+
+        PawnKindDef = SubElement(root, "PawnKindDef", {"ParentName": "AnimalKindBase"})
+
+        SubElement(PawnKindDef, "defName").text = "PW_" + pokemonDefName
+        SubElement(PawnKindDef, "label").text = pokemonFullName
+        SubElement(PawnKindDef, "labelPlural").text = pokemonFullName
+        SubElement(PawnKindDef, "race").text = "PW_" + pokemonDefName
+        SubElement(PawnKindDef, "combatPower").text = str(combatPower)
         
         if (isBaby or isLegendary or isFossil or isParticular):
-            f.write("    <canArriveManhunter>false</canArriveManhunter>\n")
-        
-        f.write("    <ecoSystemWeight>%.2f</ecoSystemWeight>\n"% (ecoSystemWeight))
-        if herdAnimal == "true":
-            f.write("    <wildGroupSize>%d~%d</wildGroupSize>\n"% (wildGroupMin, wildGroupMax)) 
-            
-        f.write("    <lifeStages>\n")
-        f.write("      <li>\n")
-        
-        f.write("        <bodyGraphicData>\n")
-        if (femaleDifference == 1):
-            f.write("          <texPath>%s</texPath>\n"% (texturePathMale))
-        else:
-            f.write("          <texPath>%s</texPath>\n"% (texturePath))
-        f.write("          <drawSize>%.1f</drawSize>\n"% (drawSize))
-        f.write("          <shadowData>\n")
-        f.write("            <volume>(%.2f, %.2f, %.2f)</volume>\n"% (ShadowVolume1,ShadowVolume2,ShadowVolume3))
-        f.write("            <offset>(%.2f, %.2f, %.2f)</offset>\n"% (shadowOffset_1,shadowOffset_2,shadowOffset_3))
-        f.write("          </shadowData>\n")
-        f.write("        </bodyGraphicData>\n")
-        
-        f.write("        <dessicatedBodyGraphicData>\n")
-        f.write("          <texPath>%s</texPath>\n"% (texPathDessicated))
-        f.write("          <drawSize>%.1f</drawSize>\n"% (dessicatedDrawSize))
-        f.write("        </dessicatedBodyGraphicData>\n")
-        
-        if (femaleDifference == 1):
-            
-            f.write("        <femaleGraphicData>\n")
-            f.write("          <texPath>%s</texPath>\n"% (texturePathFemale))
-            f.write("          <drawSize>%.1f</drawSize>\n"% (drawSize))
-            f.write("          <shadowData>\n")
-            f.write("            <volume>(%.2f, %.2f, %.2f)</volume>\n"% (ShadowVolume1,ShadowVolume2,ShadowVolume3))
-            f.write("            <offset>(%.2f, %.2f, %.2f)</offset>\n"% (shadowOffset_1,shadowOffset_2,shadowOffset_3))
-            f.write("          </shadowData>\n")
-            f.write("        </femaleGraphicData>\n")
-    
-        f.write("      </li>\n")
-        f.write("    </lifeStages>\n")
-        f.write("  </PawnKindDef>\n\n")
-        
-    f.write("</Defs>")           
-    f.close()
+            SubElement(PawnKindDef, "canArriveManhunter").text = "false"
 
-if __name__ == '__main__':
+        SubElement(PawnKindDef, "ecoSystemWeight").text = f"{ecoSystemWeight:.2f}"
+        
+        if herdAnimal == "true":
+            SubElement(PawnKindDef, "wildGroupSize").text = f"{wildGroupMin}~{wildGroupMax}"
+            
+        lifeStages      = SubElement(PawnKindDef, "lifeStages")
+        li              = SubElement(lifeStages, "li")
+        bodyGraphicData = SubElement(li, "bodyGraphicData")
+
+        if (femaleDifference == 1):
+            SubElement(bodyGraphicData, "texPath").text = texturePathMale
+        else:
+            SubElement(bodyGraphicData, "texPath").text = texturePath
+
+        SubElement(bodyGraphicData, "drawSize").text = f"{drawSize:.1f}"
+
+        shadowData = SubElement(bodyGraphicData, "shadowData")
+        
+        SubElement(shadowData, "volume").text = f"({ShadowVolume1:.2f}, {ShadowVolume2:.2f}, {ShadowVolume3:.2f})"
+        SubElement(shadowData, "offset").text = f"({shadowOffset_1:.2f}, {shadowOffset_2:.2f}, {shadowOffset_3:.2f})"
+        
+        dessicatedBodyGraphicData = SubElement(li, "dessicatedBodyGraphicData")
+        
+        SubElement(dessicatedBodyGraphicData, "texPath").text = texPathDessicated
+        SubElement(dessicatedBodyGraphicData, "drawSize").text = f"{dessicatedDrawSize:.1f}"
+        
+        if (femaleDifference == 1):
+            femaleGraphicData = SubElement(li, "femaleGraphicData")
+
+            SubElement(femaleGraphicData, "texPath").text = texturePathFemale
+            SubElement(femaleGraphicData, "drawSize").text = f"{drawSize:.1f}"
+            
+            shadowData = SubElement(femaleGraphicData, "shadowData")
+
+            SubElement(shadowData, "volume").text = f"({ShadowVolume1:.2f}, {ShadowVolume2:.2f}, {ShadowVolume3:.2f})"
+            SubElement(shadowData, "offset").text = f"({shadowOffset_1:.2f}, {shadowOffset_2:.2f}, {shadowOffset_3:.2f})"
+        
+    with open('OutputFiles/Races_Pokemon.xml', 'wb') as f:
+        indent(root, space = "  ")
+        test = tostring(root, xml_declaration=True, encoding='utf8', method='xml')
+        f.write(test)
+
+
+if __name__ == "__main__":
     main()
