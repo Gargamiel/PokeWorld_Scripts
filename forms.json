@@ -1,0 +1,347 @@
+{
+  "Pichu": {
+    "formChangerCondition": "Fixed",
+    "showFormLabel": "false",
+    "forms": [
+      {
+        "label": "Normal"
+      },
+      {
+        "label": "Spiky",
+        "weight": "0.01"
+      }
+    ]
+  },
+  "Unown": {
+    "formChangerCondition": "Fixed",
+    "showFormLabel": "true",
+    "forms": [
+      {
+        "label": "A"
+      },
+      {
+        "label": "B"
+      },
+      {
+        "label": "C"
+      },
+      {
+        "label": "D"
+      },
+      {
+        "label": "E"
+      },
+      {
+        "label": "F"
+      },
+      {
+        "label": "G"
+      },
+      {
+        "label": "H"
+      },
+      {
+        "label": "I"
+      },
+      {
+        "label": "J"
+      },
+      {
+        "label": "K"
+      },
+      {
+        "label": "L"
+      },
+      {
+        "label": "M"
+      },
+      {
+        "label": "N"
+      },
+      {
+        "label": "O"
+      },
+      {
+        "label": "P"
+      },
+      {
+        "label": "Q"
+      },
+      {
+        "label": "R"
+      },
+      {
+        "label": "S"
+      },
+      {
+        "label": "T"
+      },
+      {
+        "label": "U"
+      },
+      {
+        "label": "V"
+      },
+      {
+        "label": "W"
+      },
+      {
+        "label": "X"
+      },
+      {
+        "label": "Y"
+      },
+      {
+        "label": "Z"
+      },
+      {
+        "label": "!",
+        "texPathKey": "Exclamation",
+        "weight": "0.2"
+      },
+      {
+        "label": "?",
+        "texPathKey": "Question",
+        "weight": "0.2"
+      }
+    ]
+  },
+  "Castform": {
+    "formChangerCondition": "Environment",
+    "showFormLabel": "false",
+    "forms": [
+      {
+        "label": "Normal",
+        "isDefault": "true"
+      },
+      {
+        "label": "Sunny",
+        "timeOfDay": "Day",
+        "includeWeathers": [
+          "Clear"
+        ],
+        "type1": "Fire"
+      },
+      {
+        "label": "Rainy",
+        "includeWeathers": [
+          "Rain",
+          "RainyThunderstorm",
+          "FoggyRain"
+        ],
+        "type1": "Water"
+      },
+      {
+        "label": "Snowy",
+        "includeWeathers": [
+          "SnowHard",
+          "SnowGentle"
+        ],
+        "type1": "Ice"
+      }
+    ]
+  },
+  "Deoxys": {
+    "formChangerCondition": "Selectable",
+    "forms": [
+      {
+        "label": "Normal",
+        "isDefault": "true"
+      },
+      {
+        "label": "Attack"
+      },
+      {
+        "label": "Defense"
+      },
+      {
+        "label": "Speed"
+      }
+    ]
+  },
+  "Burmy": {
+    "formChangerCondition": "Environment",
+    "forms": [
+      {
+        "label": "Plant",
+        "isDefault": "true"
+      },
+      {
+        "label": "Sandy",
+        "includeBiomes": [
+          "AridShrubland",
+          "Desert",
+          "ExtremeDesert"
+        ]
+      },
+      {
+        "label": "Trash",
+        "includeBiomes": [
+          "Tundra",
+          "IceSheet",
+          "SeaIce"
+        ]
+      }
+    ]
+  },
+  "Wormadam": {
+    "formChangerCondition": "Fixed",
+    "forms": [
+      {
+        "label": "Plant"
+      },
+      {
+        "label": "Sandy"
+      },
+      {
+        "label": "Trash"
+      }
+    ]
+  },
+  "Cherrim": {
+    "formChangerCondition": "Environment",
+    "forms": [
+      {
+        "label": "Overcast",
+        "isDefault": "true"
+      },
+      {
+        "label": "Sunshine",
+        "timeOfDay": "Day",
+        "includeWeathers": [
+          "Clear"
+        ]
+      }
+    ]
+  },
+  "Shellos": {
+    "formChangerCondition": "Fixed",
+    "forms": [
+      {
+        "label": "East"
+      },
+      {
+        "label": "West"
+      }
+    ]
+  },
+  "Gastrodon": {
+    "formChangerCondition": "Fixed",
+    "forms": [
+      {
+        "label": "East"
+      },
+      {
+        "label": "West"
+      }
+    ]
+  },
+  "Rotom": {
+    "formChangerCondition": "Selectable",
+    "forms": [
+      {
+        "label": "Normal",
+        "isDefault": "true"
+      },
+      {
+        "label": "Heat"
+      },
+      {
+        "label": "Wash"
+      },
+      {
+        "label": "Frost"
+      },
+      {
+        "label": "Fan"
+      },
+      {
+        "label": "Mow"
+      }
+    ]
+  },
+  "Shaymin": {
+    "formChangerCondition": "Selectable",
+    "forms": [
+      {
+        "label": "Land",
+        "isDefault": "true"
+      },
+      {
+        "label": "Sky"
+      }
+    ]
+  },
+  "Giratina": {
+    "formChangerCondition": "Selectable",
+    "forms": [
+      {
+        "label": "Altered",
+        "isDefault": "true"
+      },
+      {
+        "label": "Origin"
+      }
+    ]
+  },
+  "Arceus": {
+    "formChangerCondition": "Selectable",
+    "forms": [
+      {
+        "label": "Normal",
+        "isDefault": "true"
+      },
+      {
+        "label": "Fire"
+      },
+      {
+        "label": "Water"
+      },
+      {
+        "label": "Electric"
+      },
+      {
+        "label": "Grass"
+      },
+      {
+        "label": "Ice"
+      },
+      {
+        "label": "Fighting"
+      },
+      {
+        "label": "Poison"
+      },
+      {
+        "label": "Ground"
+      },
+      {
+        "label": "Flying"
+      },
+      {
+        "label": "Psychic"
+      },
+      {
+        "label": "Bug"
+      },
+      {
+        "label": "Rock"
+      },
+      {
+        "label": "Ghost"
+      },
+      {
+        "label": "Dragon"
+      },
+      {
+        "label": "Dark"
+      },
+      {
+        "label": "Steel"
+      },
+      {
+        "label": "Fairy"
+      }
+    ]
+  }
+}
