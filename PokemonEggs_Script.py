@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import pandas as pd
 import codecs
+from lxml.etree import Element, SubElement, Comment, ElementTree, tostring, indent
 
 def GetCSVData(filePath):
     data = pd.read_csv(filePath,keep_default_na=False)    
@@ -31,12 +32,13 @@ def main():
     
     PokemonData = GetCSVData("Data/DataPokemon.csv")   
     
-    f = codecs.open("OutputFiles/PokemonEggs.xml", "w", "utf-8")
-    
-    f.write('<?xml version="1.0" encoding="utf-8" ?>\n')
-    f.write("<Defs>\n\n")
-    
-    for i in range(0,493):      
+    #f = codecs.open("OutputFiles/PokemonEggs.xml", "w", "utf-8")
+
+    root = Element("Defs")
+
+    defNameList = list(PokemonData.DefName)
+
+    for i, pokemonDefName in enumerate(defNameList):    
         
         defName = PokemonData.DefName[i]
         name = PokemonData.Name[i]   
@@ -56,26 +58,30 @@ def main():
         tradability = GetTradability(isLegendary, isFossil, isParticular)
         
         if (evolutionTier == 1 and ((eggGroup1 != "Undiscovered" and eggGroup2 != "Undiscovered") or isBaby == 1 or defName == "Phione") and defName != "Ditto" and defName != "Manaphy"):
-            f.write('  <ThingDef ParentName="PokemonEggBase">\n')
-            f.write("    <defName>PW_Egg%s</defName>\n"% (defName))
+            ThingDef = SubElement(root, "ThingDef", {"ParentName": "PokemonEggBase"})
+
+            SubElement(ThingDef, "defName").text = "PW_Egg" + pokemonDefName
+
             """Not writing label to keep content secret"""
-            #f.write("    <label>%s Egg</label>\n"% (name))
-            f.write("    <tradeability>%s</tradeability>\n"% (tradability))
-            f.write("    <comps>\n")
-            f.write('      <li Class="PokeWorld.CompProperties_PokemonEggHatcher">\n')
-            f.write("        <hatcherDaystoHatch>%d</hatcherDaystoHatch>\n"% (eggHatchDays))
-            f.write("        <hatcherPawn>PW_%s</hatcherPawn>\n"% (defName))
-            f.write("      </li>\n")           
-            f.write('      <li Class="CompProperties_TemperatureRuinable">\n')
-            f.write("        <minSafeTemperature>%d</minSafeTemperature>\n"%(minSafeTemperature))
-            f.write("        <maxSafeTemperature>%d</maxSafeTemperature>\n"%(maxSafeTemperature))
-            f.write("        <progressPerDegreePerTick>0.00001</progressPerDegreePerTick>\n")
-            f.write("      </li>\n")           
-            f.write("    </comps>\n")
-            f.write("  </ThingDef>\n\n")
+            #SubElement(ThingDef, "label").text = pokemonDefName + " Egg" 
+
+            SubElement(ThingDef, "tradeability").text = tradability
+
+            comps = SubElement(ThingDef, "comps")
+            
+            li = SubElement(comps, "li", {"Class": "PokeWorld.CompProperties_PokemonEggHatcher"})
+            SubElement(li, "hatcherDaystoHatch").text = str(int(eggHatchDays))
+            SubElement(li, "hatcherPawn").text = "PW_" + pokemonDefName
+            
+            li = SubElement(comps, "li", {"Class": "CompProperties_TemperatureRuinable"})         
+            SubElement(li, "minSafeTemperature").text = str(minSafeTemperature)
+            SubElement(li, "maxSafeTemperature").text = str(maxSafeTemperature)
+            SubElement(li, "progressPerDegreePerTick").text = "0.00001"
         
-    f.write("</Defs>")
-    f.close()
+    with open('OutputFiles/PokemonEggs.xml', 'wb') as f:
+        indent(root, space = "  ")
+        test = tostring(root, xml_declaration=True, encoding='utf8', method='xml')
+        f.write(test)
 
 if __name__ == '__main__':
     main()
