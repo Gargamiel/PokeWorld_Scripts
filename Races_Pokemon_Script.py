@@ -555,7 +555,7 @@ def main():
             
             SubElement(li, "compClass").text = "PokeWorld.CompPokemonHeatPusher"
             SubElement(li, "heatPerSecond").text = f"{totalStat / 220:.2f}"
-            SubElement(li, "heatPushMaxTemperature").text = "32"
+            SubElement(li, "heatPushMaxTemperature").text = "28"
             
         if((type1 == "Ice" or type2 == "Ice") and not(type1 == "Fire" or type2 == "Fire")):
             li = SubElement(comps, "li", {"Class":"CompProperties_HeatPusher"})
