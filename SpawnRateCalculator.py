@@ -30,7 +30,7 @@ def main():
         operation = SubElement(root, "Operation", {"Class": "PatchOperationAdd"})
         SubElement(operation, "xpath").text = '/Defs/BiomeDef[defName="{0}"]/wildAnimals'.format(biome)
         value = SubElement(operation, "value")
-        for i in range(0,493):
+        for i in range(0, len(PokemonData.DefName)):
             defName = PokemonData.DefName[i]
             type1 = PokemonData.Type1[i]
             type2 = PokemonData.Type2[i] 
