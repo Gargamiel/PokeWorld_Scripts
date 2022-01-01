@@ -568,10 +568,13 @@ def main():
             SubElement(li, "heatPushMinTemperature").text = "-8"
 
         if(type1 == "Electric" or type2 == "Electric"):
+            basePowerConsumption = -totalStat / 8
+            if(isLegendary):
+                basePowerConsumption *= 3
             li = SubElement(comps, "li", {"Class":"CompProperties_Power"})
             
             SubElement(li, "compClass").text = "PokeWorld.CompPokemonPower"
-            SubElement(li, "basePowerConsumption").text = f"{-totalStat / 8:.2f}"
+            SubElement(li, "basePowerConsumption").text = f"{basePowerConsumption:.2f}"
 
         """
         if(shouldGlow):
