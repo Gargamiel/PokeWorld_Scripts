@@ -20,7 +20,7 @@ def main():
                      "Ghost" : 13, "Ice" : 14, "Dragon" : 15, "Dark" : 16, 
                      "Steel" : 17, "Flying" : 18}
 
-    PokemonData = GetCSVData("Data/DataPokemon.csv")   
+    PokemonData = GetCSVData("Data/DataPokemon_gen8.csv")   
     SpawnRateData = GetCSVData("Data/SpawnRateByType.csv")
     biomes = list(SpawnRateData.columns)
     biomes.remove("Type")

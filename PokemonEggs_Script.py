@@ -30,7 +30,7 @@ def GetTradability(isLegendary, isFossil, isParticular):
     
 def main():
     
-    PokemonData = GetCSVData("Data/DataPokemon.csv")   
+    PokemonData = GetCSVData("Data/DataPokemon_gen8.csv")   
     
     #f = codecs.open("OutputFiles/PokemonEggs.xml", "w", "utf-8")
 
