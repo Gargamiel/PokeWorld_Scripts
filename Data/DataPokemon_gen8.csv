@@ -101,7 +101,7 @@ DexNumber,Name,DefName,Generation,Type1,Type2,HP,Attack,Defense,SpAttack,SpDefen
 100,Voltorb,Voltorb,1,Electric,,40,30,50,55,55,100,0.5,1,10.4,0,50,1,-1,1,44,0,1,30,0,0,0,0,2,6,16,MediumFast,190,Mineral,,20,6.7,13.3,103,0,0,0,0,0,1,HeadPokemon
 101,Electrode,Electrode,1,Electric,,60,50,70,80,80,150,1.2,1,66.6,0,50,1,-1,2,44,1,0,0,0,0,0,0,5,30,36,MediumFast,60,Mineral,,20,6.7,13.3,150,0,0,0,0,0,2,HeadPokemon
 102,Exeggcute,Exeggcute,1,Grass,Psychic,60,40,80,60,45,40,0.4,1,2.5,0,50,0,0.5,1,45,0,0,0,0,0,0,0,2,8,18,Slow,90,Grass,,20,6.7,13.3,98,0,0,1,0,0,0,MultipleBodiedPokemon5Head
-103,Exeggutor,Exeggutor,1,Grass,Psychic,95,95,85,125,75,55,2,1,120,0,50,0,0.5,2,45,1,0,0,0,0,0,0,6,36,42,Slow,45,Grass,,20,6.7,13.3,212,0,0,0,2,0,0,MultipleBodiedPokemon3HeadAndLegs
+103,Exeggutor,Exeggutor,1,Grass,Psychic,95,95,85,125,75,55,2,2,120,0,50,0,0.5,2,45,1,0,0,0,0,0,0,6,36,42,Slow,45,Grass,,20,6.7,13.3,212,0,0,0,2,0,0,MultipleBodiedPokemon3HeadAndLegs
 104,Cubone,Cubone,1,Ground,,50,50,95,40,50,35,0.4,1,6.5,0,50,0,0.5,1,46,0,1,28,0,0,0,0,3,8,18,MediumFast,190,Monster,,20,6.7,13.3,87,0,0,1,0,0,0,BipedPokemonWithTail
 105,Marowak,Marowak,1,Ground,,60,80,110,50,80,45,1,1,45,0,50,0,0.5,2,46,1,0,0,0,0,0,0,6,30,36,MediumFast,75,Monster,,20,6.7,13.3,124,0,0,2,0,0,0,BipedPokemonWithTail
 106,Hitmonlee,Hitmonlee,1,Fighting,,50,120,53,35,110,87,1.5,1,49.8,0,50,0,0,2,47,1,0,0,0,0,0,0,5,30,36,MediumFast,45,HumanLike,,25,8.3,16.7,139,0,2,0,0,0,0,BipedPokemon
@@ -577,7 +577,7 @@ DexNumber,Name,DefName,Generation,Type1,Type2,HP,Attack,Defense,SpAttack,SpDefen
 576,Gothitelle,Gothitelle,5,Psychic,,70,55,95,95,110,65,1.5,1,44,0,70,0,0.75,3,293,1,0,0,0,0,0,0,6,20,20,MediumSlow,50,HumanLike,,20,6.7,13.4,221,0,0,0,0,3,0,BipedPokemon
 577,Solosis,Solosis,5,Psychic,,45,30,40,105,50,20,0.3,1,1,0,70,0,0.5,1,294,0,1,32,0,0,0,0,2,20,20,MediumSlow,200,Amorphous,,20,6.7,13.4,58,0,0,0,1,0,0,HeadPokemon
 578,Duosion,Duosion,5,Psychic,,65,40,50,125,60,30,0.6,1,8,0,70,0,0.5,2,294,0,1,41,0,0,0,0,4,20,20,MediumSlow,100,Amorphous,,20,6.7,13.4,130,0,0,0,2,0,0,HeadPokemonWithBody
-579,Reuniclus,Reuniclus,5,Psychic,,110,65,75,125,85,30,1,2,20.1,0,70,0,0.5,3,294,1,0,0,0,0,0,0,6,20,20,MediumSlow,50,Amorphous,,20,6.7,13.4,221,0,0,0,3,0,0,HeadPokemonWithArms
+579,Reuniclus,Reuniclus,5,Psychic,,110,65,75,125,85,30,1,1,20.1,0,70,0,0.5,3,294,1,0,0,0,0,0,0,6,20,20,MediumSlow,50,Amorphous,,20,6.7,13.4,221,0,0,0,3,0,0,HeadPokemonWithArms
 580,Ducklett,Ducklett,5,Water,Flying,62,44,50,44,50,55,0.5,1,5.5,0,70,0,0.5,1,295,0,1,35,0,0,0,0,2,20,20,MediumFast,190,Water1,Flying,20,6.7,13.4,61,1,0,0,0,0,0,WingedPokemonWithBeak
 581,Swanna,Swanna,5,Water,Flying,75,87,63,87,63,98,1.3,1,24.2,0,70,0,0.5,2,295,1,0,0,0,0,0,0,5,20,20,MediumFast,45,Water1,Flying,20,6.7,13.4,166,0,0,0,0,0,2,WingedPokemonWithBeak
 582,Vanillite,Vanillite,5,Ice,,36,50,50,65,60,44,0.4,1,5.7,0,70,0,0.5,1,296,0,1,35,0,0,0,0,2,20,20,Slow,255,Mineral,,20,6.7,13.4,61,0,0,0,1,0,0,HeadPokemonWithBody
@@ -714,11 +714,11 @@ DexNumber,Name,DefName,Generation,Type1,Type2,HP,Attack,Defense,SpAttack,SpDefen
 713,Avalugg,Avalugg,6,Ice,,95,117,184,44,46,28,2,1,505,0,70,0,0.5,2,366,1,0,0,0,0,0,0,5,20,20,MediumFast,55,Monster,Mineral,20,6.7,13.4,180,0,0,2,0,0,0,QuadrupedPokemonWithHoovesAndTail
 714,Noibat,Noibat,6,Flying,Dragon,40,30,35,45,40,55,0.5,1,8,0,70,0,0.5,1,367,0,1,48,0,0,0,0,3,20,20,MediumFast,190,Flying,Dragon,20,6.7,13.4,49,0,0,0,0,0,1,WingedPokemonWithJaw
 715,Noivern,Noivern,6,Flying,Dragon,85,70,80,97,80,123,1.5,1,85,0,70,0,0.5,2,367,1,0,0,0,0,0,0,5,20,20,MediumFast,45,Flying,Dragon,20,6.7,13.4,187,0,0,0,0,0,2,WingedPokemonWithJaw
-716,Xerneas,Xerneas,6,Fairy,,126,131,95,131,98,99,3,1,215,0,0,1,-1,1,368,1,0,0,0,0,1,0,10,20,20,Slow,45,Undiscovered,,120,40,80,306,3,0,0,0,0,0,QuadrupedPokemonWithHoovesAndTail
-717,Yveltal,Yveltal,6,Dark,Flying,126,131,95,131,98,99,5.8,1,203,0,0,1,-1,1,369,1,0,0,0,0,1,0,10,20,20,Slow,45,Undiscovered,,120,40,80,306,3,0,0,0,0,0,WingedPokemonWithJaw
-718,Zygarde,Zygarde,6,Dragon,Ground,108,100,121,81,95,95,5,1,305,0,0,1,-1,1,370,1,0,0,0,0,1,0,10,20,20,Slow,3,Undiscovered,,120,40,80,270,3,0,0,0,0,0,SnakePokemon
+716,Xerneas,Xerneas,6,Fairy,,126,131,95,131,98,99,3,2,215,0,0,1,-1,1,368,1,0,0,0,0,1,0,10,20,20,Slow,45,Undiscovered,,120,40,80,306,3,0,0,0,0,0,QuadrupedPokemonWithHoovesAndTail
+717,Yveltal,Yveltal,6,Dark,Flying,126,131,95,131,98,99,5.8,2,203,0,0,1,-1,1,369,1,0,0,0,0,1,0,10,20,20,Slow,45,Undiscovered,,120,40,80,306,3,0,0,0,0,0,WingedPokemonWithJaw
+718,Zygarde,Zygarde,6,Dragon,Ground,108,100,121,81,95,95,5,2,305,0,0,1,-1,1,370,1,0,0,0,0,1,0,10,20,20,Slow,3,Undiscovered,,120,40,80,270,3,0,0,0,0,0,SnakePokemon
 719,Diancie,Diancie,6,Rock,Fairy,50,100,150,100,150,50,0.7,1,8.8,0,70,1,-1,1,371,1,0,0,0,0,1,0,10,20,20,Slow,3,Undiscovered,,25,8.3,16.6,270,0,0,1,0,2,0,HeadPokemonWithArms
-720,Hoopa,Hoopa,6,Psychic,Ghost,80,110,60,150,130,70,0.5,1,9,0,100,1,-1,1,372,1,0,0,0,0,1,0,10,20,20,Slow,3,Undiscovered,,120,40,80,270,0,0,0,3,0,0,HeadPokemonWithArms
+720,Hoopa,Hoopa,6,Psychic,Ghost,80,110,60,150,130,70,0.5,2,9,0,100,1,-1,1,372,1,0,0,0,0,1,0,10,20,20,Slow,3,Undiscovered,,120,40,80,270,0,0,0,3,0,0,HeadPokemonWithArms
 721,Volcanion,Volcanion,6,Fire,Water,80,110,120,130,90,70,1.7,1,195,0,100,1,-1,1,373,1,0,0,0,0,1,0,10,20,20,Slow,3,Undiscovered,,120,40,80,270,0,0,0,3,0,0,QuadrupedPokemonWithHoovesAndTail
 722,Rowlet,Rowlet,7,Grass,Flying,68,55,55,50,50,42,0.3,1,1.5,0,70,0,0.125,1,374,0,1,17,0,0,0,0,3,20,20,MediumSlow,45,Flying,,15,5,10,64,1,0,0,0,0,0,WingedPokemonWithBeak
 723,Dartrix,Dartrix,7,Grass,Flying,78,75,75,70,70,52,0.7,1,16,0,70,0,0.125,2,374,0,1,34,0,0,0,0,5,20,20,MediumSlow,45,Flying,,15,5,10,147,2,0,0,0,0,0,WingedPokemonWithBeak
@@ -888,7 +888,7 @@ DexNumber,Name,DefName,Generation,Type1,Type2,HP,Attack,Defense,SpAttack,SpDefen
 887,Dragapult,Dragapult,8,Dragon,Ghost,88,120,75,100,75,142,3,1,50,0,50,0,0.5,3,465,1,0,0,0,0,0,0,9,20,20,Slow,45,Amorphous,Dragon,40,13.3,26.6,300,0,0,0,0,0,3,QuadrupedPokemonWithPawsAndTail
 888,Zacian,Zacian,8,Fairy,,92,130,115,80,115,138,2.8,1,110,0,0,1,-1,1,466,1,0,0,0,0,1,0,10,20,20,Slow,10,Undiscovered,,120,40,80,335,0,0,0,0,0,3,QuadrupedPokemonWithPawsAndTail
 889,Zamazenta,Zamazenta,8,Fighting,,92,130,115,80,115,138,2.9,1,210,0,0,1,-1,1,467,1,0,0,0,0,1,0,10,20,20,Slow,10,Undiscovered,,120,40,80,335,0,0,0,0,0,3,QuadrupedPokemonWithPawsAndTail
-890,Eternatus,Eternatus,8,Poison,Dragon,140,85,95,145,95,130,20,1,950,0,0,1,-1,1,468,1,0,0,0,0,1,0,10,20,20,Slow,255,Undiscovered,,120,40,80,345,3,0,0,0,0,0,SnakePokemon
+890,Eternatus,Eternatus,8,Poison,Dragon,140,85,95,145,95,130,20,2,950,0,0,1,-1,1,468,1,0,0,0,0,1,0,10,20,20,Slow,255,Undiscovered,,120,40,80,345,3,0,0,0,0,0,SnakePokemon
 891,Kubfu,Kubfu,8,Fighting,,60,90,60,53,50,72,0.6,1,12,0,50,0,0.125,1,469,0,0,0,0,0,1,0,10,20,20,Slow,3,Undiscovered,,120,40,80,77,0,1,0,0,0,0,BipedPokemonWithTail
 892,Urshifu,Urshifu,8,Fighting,Dark,100,130,100,63,60,97,1.9,1,105,0,50,0,0.125,2,469,1,0,0,0,0,1,0,10,20,20,Slow,3,Undiscovered,,120,40,80,275,0,3,0,0,0,0,BipedPokemonWithTail
 893,Zarude,Zarude,8,Dark,Grass,105,120,105,70,95,105,1.8,1,70,0,0,1,-1,1,470,1,0,0,0,0,1,0,10,20,20,Slow,3,Undiscovered,,120,40,80,300,0,3,0,0,0,0,QuadrupedPokemonWithPawsAndTail

@@ -9,9 +9,9 @@ from lxml.etree import Element, SubElement, Comment, ElementTree, tostring, inde
 
 def LagrangeInterpol(x, y, xp):
     yp = 0
-    for i in range(5):
+    for i in range(len(x)):
         p = 1
-        for j in range(5):
+        for j in range(len(x)):
             if i != j:
                 p = p * (xp - x[j])/(x[i] - x[j])
         
@@ -19,10 +19,10 @@ def LagrangeInterpol(x, y, xp):
     return yp
 
 def LagrangeInterpolSpeed(xp):
-    return LagrangeInterpol([5, 30, 50, 135, 160], [1, 3, 4, 6, 8], xp)
+    return LagrangeInterpol([5, 30, 50, 135, 160, 200, 1000], [1, 3, 4, 6, 8, 9, 10], xp)
 
 def LagrangeInterpolSize(xp):
-    return LagrangeInterpol([0.2, 1, 5, 10, 14], [1.5, 2, 3.5, 5, 6], xp)
+    return LagrangeInterpol([0.2, 1, 5, 10, 14, 20, 100], [1.5, 2, 3.5, 5, 6, 7, 8], xp)
 
 def GetMinimumComfortableTemperature(pokemonType1, pokemonType2):
     MinimumTempType1 = GetMinTemp(pokemonType1)
