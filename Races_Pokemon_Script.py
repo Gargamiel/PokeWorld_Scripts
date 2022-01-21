@@ -228,9 +228,9 @@ def GetGlow(type1):
     return [flag, colors]
 
 def main():  
-    PokemonData = GetCSVData("Data/DataPokemon_gen8.csv")   
+    PokemonData = GetCSVData("Data/DataPokemon.csv")   
     EvolutionData = GetCSVData("Data/DataEvolutions.csv")
-    useOldMove = True
+    useOldMove = False
     if(useOldMove == True):
         MoveData = GetCSVData("Data/DataMovesOld.csv")
     else:
@@ -259,10 +259,12 @@ def main():
 
     hasForm = list(formsData.keys())
     
-    #movesPokemonId = list(MoveData.DexNumber)
-    #movesName = list(MoveData.Moves)
-    #movesUnlockLevel = list(MoveData.Level)
- 
+
+    if(useOldMove == True):
+        movesPokemonId = list(MoveData.DexNumber)
+        movesName = list(MoveData.Moves)
+        movesUnlockLevel = list(MoveData.Level)
+
     """defining some global variables"""
     dessicatedDrawSize_Mult = 0.5
     shadowVolumeMult_1 = 0.35
