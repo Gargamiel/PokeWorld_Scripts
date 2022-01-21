@@ -245,9 +245,13 @@ def GetGlow(type1):
 def main():  
     PokemonData = GetCSVData("Data/DataPokemon.csv")   
     EvolutionData = GetCSVData("Data/DataEvolutions.csv")
-    with open("Data/DataMoves.json", "r", encoding = "utf8") as f:
-        MoveData = json.load(f)
-    
+    useOldMove = True
+    if(useOldMove == True):
+        MoveData = GetCSVData("Data/DataMovesOld.csv")
+    else:
+        with open("Data/DataMoves.json", "r", encoding = "utf8") as f:
+            MoveData = json.load(f)
+
     """Defining some lists containing data we iterate on, for evolutions and moves"""
     pokemonEvolutionLine = list(PokemonData.EvolLine)
     pokemonEvolutionTier = list(PokemonData.EvolTier)
@@ -279,9 +283,10 @@ def main():
     for name in [name for name in defNameList if name not in otherEvoRequirements.keys()]:
         otherEvoRequirements[name] = "none"
     
-    #movesPokemonId = list(MoveData.DexNumber)
-    #movesName = list(MoveData.Moves)
-    #movesUnlockLevel = list(MoveData.Level)
+    if(useOldMove == True):
+        movesPokemonId = list(MoveData.DexNumber)
+        movesName = list(MoveData.Moves)
+        movesUnlockLevel = list(MoveData.Level)
  
     """defining some global variables"""
     dessicatedDrawSize_Mult = 0.5
@@ -439,20 +444,38 @@ def main():
         SubElement(sub2Li, "unlockLevel").text = "1"
         alreadyAddedMoves = []
 
-        for move in MoveData[pokemonFullName]["moves"]:
-            #print(moveID, pokedexNumber)
-            if move["moveName"] in alreadyAddedMoves:
-                continue
-            
-            alreadyAddedMoves.append(move["moveName"])
-            
-            if(move["moveName"] == "Explosion"):
-                continue
-            
-            sub3Li = SubElement(moves, "li")
-            SubElement(sub3Li, "moveDef").text = move["moveName"]
-            SubElement(sub3Li, "unlockLevel").text = str(move["learnLvl"]) 
-    
+        if(useOldMove == True):
+
+            for index, moveID in enumerate(movesPokemonId):
+                if(moveID == pokedexNumber):
+                    moveName = movesName[index]
+                    
+                    if(alreadyAddedMoves.count(moveName) > 0):
+                        continue
+                    alreadyAddedMoves.append(moveName)
+                    
+                    if(moveName == "Explosion"):
+                        continue
+                    
+                    sub3Li = SubElement(moves, "li")
+                    SubElement(sub3Li, "moveDef").text = moveName
+                    SubElement(sub3Li, "unlockLevel").text = str(movesUnlockLevel[index]) 
+        else:
+           
+            for move in MoveData[pokemonFullName]["moves"]:
+                #print(moveID, pokedexNumber)
+                if move["moveName"] in alreadyAddedMoves:
+                    continue
+                
+                alreadyAddedMoves.append(move["moveName"])
+                
+                if(move["moveName"] == "Explosion"):
+                    continue
+                
+                sub3Li = SubElement(moves, "li")
+                SubElement(sub3Li, "moveDef").text = move["moveName"]
+                SubElement(sub3Li, "unlockLevel").text = str(move["learnLvl"]) 
+           
         if (isBaby or isLegendary or isFossil or isParticular):
             attributes = SubElement(li, "attributes")
             if (isBaby):
