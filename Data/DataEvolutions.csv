@@ -391,7 +391,7 @@ DexNumber,EvolvingFrom,EvolvedDexNumber,EvolvingTo,EvolutionRequirement,Level,It
 789,Cosmog,790,Cosmoem,level,43,,,,,,,,
 790,Cosmoem,791,Solgaleo,level,53,,,,Day,,,,
 790,Cosmoem,792,Lunala,level,53,,,,Night,,,,
-803,Poipole,804,Naganadel,level,32,,,,,,,,X
+803,Poipole,804,Naganadel,level,40,,,,,,,,X
 808,Meltan,809,Melmetal,level,35,,,,,,,,X
 810,Grookey,811,Thwackey,level,16,,,,,,,,
 811,Thwackey,812,Rillaboom,level,35,,,,,,,,
@@ -411,8 +411,8 @@ DexNumber,EvolvingFrom,EvolvedDexNumber,EvolvingTo,EvolutionRequirement,Level,It
 835,Yamper,836,Boltund,level,25,,,,,,,,
 837,Rolycoly,838,Carkol,level,18,,,,,,,,
 838,Carkol,839,Coalossal,level,34,,,,,,,,
-840,Applin,841,Flapple,level,45,,,,Day,,,,X
-840,Applin,842,Appletun,level,45,,,,Night,,,,X
+840,Applin,841,Flapple,level,35,,,,Day,,,,X
+840,Applin,842,Appletun,level,35,,,,Night,,,,X
 843,Silicobra,844,Sandaconda,level,36,,,,,,,,
 846,Arrokuda,847,Barraskewda,level,26,,,,,,,,
 848,Toxel,849,Toxtricity,level,30,,,,,,,,
