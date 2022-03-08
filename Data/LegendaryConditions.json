@@ -1,0 +1,498 @@
+{
+  "Articuno": {
+    "generationsRequirements": [
+      {
+        "generation": "1",
+        "minNoLegCaught": "73"
+      }
+    ],
+    "requiredKindCaught": [
+      "Blastoise",
+      "Dewgong",
+      "Cloyster",
+      "Lapras",
+      "Jynx",
+      "Vaporeon"
+    ],
+    "requiredCaughtMinCount": "3"
+  },
+
+  "Zapdos": {
+    "generationsRequirements": [
+      {
+        "generation": "1",
+        "minNoLegCaught": "73"
+      }
+    ],
+    "requiredKindCaught": [
+      "Raichu",
+      "Magneton",
+      "Electrode",
+      "Electabuzz",
+      "Jolteon"
+    ],
+    "requiredCaughtMinCount": "3"
+  },
+
+  "Moltres": {
+    "generationsRequirements": [
+      {
+        "generation": "1",
+        "minNoLegCaught": "73"
+      }
+    ],
+    "requiredKindCaught": [
+      "Charizard",
+      "Ninetales",
+      "Arcanine",
+      "Rapidash",
+      "Magmar",
+      "Flareon"
+    ],
+    "requiredCaughtMinCount": "3"
+  },
+
+  "Mewtwo": {
+    "generationsRequirements": [
+      {
+        "generation": "1",
+        "minNoLegCaught": "117"
+      }
+    ],
+    "requiredKindSeen": [
+      "Articuno",
+      "Zapdos",
+      "Moltres"
+    ]
+  },
+
+  "Mew": {
+    "generationsRequirements": [
+      {
+        "generation": "1",
+        "minNoLegCaught": "146"
+      }
+    ],
+    "requiredKindSeen": [
+      "Articuno",
+      "Zapdos",
+      "Moltres",
+      "Mewtwo"
+    ]
+  },
+
+  "Raikou": {
+    "generationsRequirements": [
+      {
+        "generation": "2",
+        "minNoLegCaught": "47"
+      }
+    ],
+    "requiredKindCaught": [
+      "Lanturn",
+      "Pichu",
+      "Ampharos",
+      "Elekid"
+    ],
+    "requiredCaughtMinCount": "3"
+  },
+
+  "Entei": {
+    "generationsRequirements": [
+      {
+        "generation": "2",
+        "minNoLegCaught": "47"
+      }
+    ],
+    "requiredKindCaught": [
+      "Typhlosion",
+      "Magby",
+      "Houndoom",
+      "Magcargo"
+    ],
+    "requiredCaughtMinCount": "3"
+  },
+
+  "Suicune": {
+    "generationsRequirements": [
+      {
+        "generation": "2",
+        "minNoLegCaught": "47"
+      }
+    ],
+    "requiredKindCaught": [
+      "Feraligatr",
+      "Azumarill",
+      "Quagsire",
+      "Mantine"
+    ],
+    "requiredCaughtMinCount": "3"
+  },
+
+  "Lugia": {
+    "generationsRequirements": [
+      {
+        "generation": "2",
+        "minNoLegCaught": "66"
+      }
+    ],
+    "requiredKindSeen": [
+      "Raikou",
+      "Entei",
+      "Suicune"
+    ]
+  },
+
+  "HoOh": {
+    "generationsRequirements": [
+      {
+        "generation": "2",
+        "minNoLegCaught": "66"
+      }
+    ],
+    "requiredKindSeen": [
+      "Raikou",
+      "Entei",
+      "Suicune"
+    ]
+  },
+
+  "Celebi": {
+    "generationsRequirements": [
+      {
+        "generation": "2",
+        "minNoLegCaught": "94"
+      }
+    ],
+    "requiredKindSeen": [
+      "Raikou",
+      "Entei",
+      "Suicune",
+      "Lugia",
+      "HoOh"
+    ]
+  },
+
+  "Regirock": {
+    "generationsRequirements": [
+      {
+        "generation": "3",
+        "minNoLegCaught": "63"
+      }
+    ]
+  },
+
+  "Regice": {
+    "generationsRequirements": [
+      {
+        "generation": "3",
+        "minNoLegCaught": "63"
+      }
+    ]
+  },
+
+  "Registeel": {
+    "generationsRequirements": [
+      {
+        "generation": "3",
+        "minNoLegCaught": "63"
+      }
+    ]
+  },
+
+  "Latias": {
+    "generationsRequirements": [
+      {
+        "generation": "3",
+        "minNoLegCaught": "75"
+      }
+    ]
+  },
+
+  "Latios": {
+    "generationsRequirements": [
+      {
+        "generation": "3",
+        "minNoLegCaught": "75"
+      }
+    ]
+  },
+
+  "Kyogre": {
+    "generationsRequirements": [
+      {
+        "generation": "3",
+        "minNoLegCaught": "88"
+      }
+    ],
+    "requiredKindSeen": [
+      "Regirock",
+      "Regice",
+      "Registeel",
+      "Latios"
+    ]
+  },
+
+  "Groudon": {
+    "generationsRequirements": [
+      {
+        "generation": "3",
+        "minNoLegCaught": "88"
+      }
+    ],
+    "requiredKindSeen": [
+      "Regirock",
+      "Regice",
+      "Registeel",
+      "Latias"
+    ]
+  },
+
+  "Rayquaza": {
+    "generationsRequirements": [
+      {
+        "generation": "3",
+        "minNoLegCaught": "100"
+      }
+    ],
+    "requiredKindSeen": [
+      "Regirock",
+      "Regice",
+      "Registeel",
+      "Latias",
+      "Latios",
+      "Kyogre",
+      "Groudon"
+    ]
+  },
+
+  "Jirachi": {
+    "generationsRequirements": [
+      {
+        "generation": "3",
+        "minNoLegCaught": "125"
+      }
+    ],
+    "requiredKindSeen": [
+      "Regirock",
+      "Regice",
+      "Registeel",
+      "Latias",
+      "Latios",
+      "Kyogre",
+      "Groudon",
+      "Rayquaza",
+      "Deoxys"
+    ]
+  },
+
+  "Deoxys": {
+    "generationsRequirements": [
+      {
+        "generation": "3",
+        "minNoLegCaught": "113"
+      }
+    ]
+  },
+
+  "Uxie": {
+    "generationsRequirements": [
+      {
+        "generation": "4",
+        "minNoLegCaught": "47"
+      }
+    ]
+  },
+
+  "Mesprit": {
+    "generationsRequirements": [
+      {
+        "generation": "4",
+        "minNoLegCaught": "47"
+      }
+    ]
+  },
+
+  "Azelf": {
+    "generationsRequirements": [
+      {
+        "generation": "4",
+        "minNoLegCaught": "47"
+      }
+    ]
+  },
+
+  "Dialga": {
+    "generationsRequirements": [
+      {
+        "generation": "4",
+        "minNoLegCaught": "66"
+      }
+    ],
+    "requiredKindSeen": [
+      "Uxie",
+      "Mesprit",
+      "Azelf"
+    ]
+  },
+
+  "Palkia": {
+    "generationsRequirements": [
+      {
+        "generation": "4",
+        "minNoLegCaught": "66"
+      }
+    ],
+    "requiredKindSeen": [
+      "Uxie",
+      "Mesprit",
+      "Azelf"
+    ]
+  },
+
+  "Heatran": {
+    "generationsRequirements": [
+      {
+        "generation": "4",
+        "minNoLegCaught": "56"
+      }
+    ]
+  },
+
+  "Regigigas": {
+    "generationsRequirements": [
+      {
+        "generation": "4",
+        "minNoLegCaught": "75"
+      }
+    ],
+    "requiredKindSeen": [
+      "Regirock",
+      "Regice",
+      "Registeel"
+    ]
+  },
+
+  "Giratina": {
+    "generationsRequirements": [
+      {
+        "generation": "4",
+        "minNoLegCaught": "75"
+      }
+    ],
+    "requiredKindSeen": [
+      "Uxie",
+      "Mesprit",
+      "Azelf",
+      "Dialga",
+      "Palkia"
+    ]
+  },
+
+  "Cresselia": {
+    "generationsRequirements": [
+      {
+        "generation": "4",
+        "minNoLegCaught": "66"
+      }
+    ]
+  },
+
+  "Manaphy": {
+    "generationsRequirements": [
+      {
+        "generation": "4",
+        "minNoLegCaught": "84"
+      }
+    ]
+  },
+
+  "Darkrai": {
+    "generationsRequirements": [
+      {
+        "generation": "4",
+        "minNoLegCaught": "66"
+      }
+    ]
+  },
+
+  "Shaymin": {
+    "generationsRequirements": [
+      {
+        "generation": "4",
+        "minNoLegCaught": "93"
+      }
+    ],
+    "requiredKindSeen": [
+      "Uxie",
+      "Mesprit",
+      "Azelf",
+      "Dialga",
+      "Palkia",
+      "Heatran",
+      "Regigigas",
+      "Giratina",
+      "Cresselia",
+      "Phione",
+      "Manaphy",
+      "Darkrai"
+    ]
+  },
+
+  "Arceus": {
+    "generationsRequirements": [
+      {
+        "generation": "1",
+        "minNoLegCaught": "146"
+      },
+      {
+        "generation": "2",
+        "minNoLegCaught": "94"
+      },
+      {
+        "generation": "3",
+        "minNoLegCaught": "125"
+      },
+      {
+        "generation": "4",
+        "minNoLegCaught": "93"
+      }
+    ],
+    "requiredKindSeen": [
+      "Articuno",
+      "Zapdos",
+      "Moltres",
+      "Mewtwo",
+      "Mew",
+      "Raikou",
+      "Entei",
+      "Suicune",
+      "Lugia",
+      "HoOh",
+      "Celebi",
+      "Regirock",
+      "Regice",
+      "Registeel",
+      "Latias",
+      "Latios",
+      "Kyogre",
+      "Groudon",
+      "Rayquaza",
+      "Jirachi",
+      "Deoxys",
+      "Uxie",
+      "Mesprit",
+      "Azelf",
+      "Dialga",
+      "Palkia",
+      "Heatran",
+      "Regigigas",
+      "Giratina",
+      "Cresselia",
+      "Phione",
+      "Manaphy",
+      "Darkrai",
+      "Shaymin"
+    ]
+  }
+}
