@@ -92,21 +92,24 @@ def GetLeatherType(bodySize, eggGroup1, eggGroup2, isLegendary):
     else:
         return "Leather_Heavy"
     
-def GetToxicSensitivity(type1, type2):  
-    toxicSensitivity = 0.5
-    toxicSensitivity *= GetToxicMult(type1)
-    toxicSensitivity *= GetToxicMult(type2)
-    return toxicSensitivity
+def GetToxicResistance(type1, type2):
+    toxicResistance = 0.5
+    toxicResistance += GetToxicResistanceBonus(type1)
+    toxicResistance += GetToxicResistanceBonus(type2)
+    return min(max(0, toxicResistance), 1)
+
+def GetToxicEnvironmentResistance(type1, type2):
+    return GetToxicResistance(type1, type2)
         
-def GetToxicMult(pokemonType):
+def GetToxicResistanceBonus(pokemonType):
     if(pokemonType in ["Poison", "Steel"]):
-        return 0
-    elif(pokemonType in ["Ground", "Rock", "Ghost"]):
-        return 0.5
-    elif(pokemonType in ["Grass", "Fairy"]): 
-        return 2
-    else:
         return 1
+    elif(pokemonType in ["Ground", "Rock", "Ghost"]):
+        return 0.3
+    elif(pokemonType in ["Grass", "Fairy"]): 
+        return -0.3
+    else:
+        return 0
 
 def GetDescription(descriptionFile):
     desc1 = descriptionFile.readline()
@@ -361,8 +364,9 @@ def main():
         generation = GetGeneration(i)              
         texPath = f"Things/Pawn/Pokemon/Gen_{generation}/"
         ComfyTemperatureMin = GetMinimumComfortableTemperature(type1, type2)
-        ComfyTemperatureMax = GetMaximumComfortableTemperature(type1, type2)      
-        toxicSensitivity = GetToxicSensitivity(type1, type2)       
+        ComfyTemperatureMax = GetMaximumComfortableTemperature(type1, type2)
+        toxicResistance = GetToxicResistance(type1, type2)  
+        toxicEnvironmentResistance = GetToxicEnvironmentResistance(type1, type2) 
         descriptionFull = GetDescription(descriptionFile)        
         drawSize = GetDrawSize(size, sizeMult)
         dessicatedDrawSize = GetDessicatedDrawSize(size, sizeMult, dessicatedDrawSize_Mult)     
@@ -614,8 +618,8 @@ def main():
         SubElement(statBases, "ComfyTemperatureMax").text = str(ComfyTemperatureMax)
         SubElement(statBases, "LeatherAmount").text = str(leatherAmount)
         SubElement(statBases, "PW_BaseXPYield").text = str(expYield * expYieldMultiplier)
-        SubElement(statBases, "ToxicSensitivity").text = f"{toxicSensitivity:g}"
-        
+        SubElement(statBases, "ToxicResistance").text = f"{toxicResistance:g}"
+        SubElement(statBases, "ToxicEnvironmentResistance").text = f"{toxicEnvironmentResistance:g}"
         inspectorTabs = SubElement(ThingDef, "inspectorTabs")
         SubElement(inspectorTabs, "li").text = "PokeWorld.ITab_Pawn_Moves"
         
